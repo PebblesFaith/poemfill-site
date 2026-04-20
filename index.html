@@ -1,1441 +1,278 @@
-<!-- File: index.html -->
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-  <title>PoemFill.dev — Structured Public-Domain Text Generator</title>
-  <meta
-    name="description"
-    content="PoemFill.dev generates structured public-domain poetry, philosophy, and literary passages for UI mockups, editorial previews, and testing environments."
-  />
-  <meta
-    name="theme-color"
-    content="#F7F5F0"
-  />
-  <link
-    rel="canonical"
-    href="https://poemfill.dev/"
-  />
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  />
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet"
-  />
-  <link
-    rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F7F5F0'/%3E%3Cpath d='M18 46V18h15.5c7.8 0 12.5 4.2 12.5 10.5 0 6.6-5.1 10.8-13.1 10.8H25V46H18zm7-12.3h8c4.2 0 6.4-1.8 6.4-5.1 0-3.1-2.2-4.9-6.3-4.9H25v10z' fill='%238B938C'/%3E%3C/svg%3E"
-  />
-
-  <meta
-    property="og:title"
-    content="PoemFill.dev — Structured Public-Domain Text Generator"
-  />
-  <meta
-    property="og:description"
-    content="Generate structured public-domain poetry, philosophy, and literary passages for mockups, editorial layouts, and developer testing."
-  />
-  <meta
-    property="og:type"
-    content="website"
-  />
-  <meta
-    property="og:url"
-    content="https://poemfill.dev/"
-  />
-
-  <style>
-    :root {
-      --color-paper: #F7F5F0;
-      --color-surface: #FFFFFF;
-      --color-ink: #2B211A;
-      --color-ink-soft: #5A4F47;
-      --color-sage: #8B938C;
-      --color-sage-deep: #6F776F;
-      --color-parchment: #DCD7CC;
-      --color-border: #E7E1D6;
-      --color-border-strong: #CFC7B8;
-      --color-code-bg: #F1ECE4;
-      --color-success: #5F7A63;
-      --shadow-soft: 0 10px 28px rgba(43, 33, 26, 0.07);
-      --shadow-subtle: 0 4px 16px rgba(43, 33, 26, 0.05);
-      --radius-xl: 24px;
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --radius-sm: 10px;
-      --max-width: 1180px;
-      --transition-fast: 160ms ease;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at top left, rgba(139, 147, 140, 0.10), transparent 26%),
-        radial-gradient(circle at bottom right, rgba(220, 215, 204, 0.30), transparent 24%),
-        var(--color-paper);
-      color: var(--color-ink);
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    .container {
-      width: min(var(--max-width), calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      backdrop-filter: blur(10px);
-      background: rgba(247, 245, 240, 0.88);
-      border-bottom: 1px solid rgba(207, 199, 184, 0.65);
-    }
-
-    .header-inner {
-      min-height: 78px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      min-width: 0;
-    }
-
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(145deg, var(--color-surface), #EFE9DF);
-      border: 1px solid var(--color-border-strong);
-      box-shadow: var(--shadow-subtle);
-      font-family: "Cormorant Garamond", serif;
-      font-size: 1.55rem;
-      font-weight: 700;
-      color: var(--color-sage-deep);
-      flex-shrink: 0;
-    }
-
-    .brand-text {
-      min-width: 0;
-    }
-
-    .brand-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--color-ink);
-    }
-
-    .brand-subtitle {
-      font-size: 0.78rem;
-      color: var(--color-ink-soft);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .nav a {
-      color: var(--color-ink-soft);
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: color var(--transition-fast);
-    }
-
-    .nav a:hover {
-      color: var(--color-sage-deep);
-    }
-
-    .hero {
-      padding: 52px 0 24px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
-      gap: 26px;
-      align-items: stretch;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .hero-copy {
-      padding: 34px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: rgba(220, 215, 204, 0.65);
-      border: 1px solid var(--color-border-strong);
-      color: var(--color-sage-deep);
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-    }
-
-    .hero-title {
-      margin: 18px 0 0;
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(2.7rem, 6vw, 4.6rem);
-      line-height: 0.96;
-      letter-spacing: -0.03em;
-      font-weight: 600;
-    }
-
-    .hero-title em {
-      color: var(--color-sage-deep);
-      font-style: italic;
-      font-weight: 700;
-    }
-
-    .hero-description {
-      margin: 20px 0 0;
-      max-width: 62ch;
-      color: var(--color-ink-soft);
-      font-size: 1.02rem;
-      line-height: 1.78;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 26px;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      border: 0;
-      border-radius: 14px;
-      padding: 13px 18px;
-      font-weight: 600;
-      cursor: pointer;
-      transition:
-        transform var(--transition-fast),
-        background var(--transition-fast),
-        border-color var(--transition-fast),
-        color var(--transition-fast),
-        box-shadow var(--transition-fast);
-    }
-
-    .button:hover {
-      transform: translateY(-1px);
-    }
-
-    .button-primary {
-      background: var(--color-sage);
-      color: #FFFFFF;
-      box-shadow: 0 10px 20px rgba(111, 119, 111, 0.18);
-    }
-
-    .button-primary:hover {
-      background: var(--color-sage-deep);
-    }
-
-    .button-secondary {
-      background: transparent;
-      color: var(--color-ink);
-      border: 1px solid var(--color-border-strong);
-    }
-
-    .button-secondary:hover {
-      background: rgba(220, 215, 204, 0.34);
-    }
-
-    .hero-preview {
-      padding: 22px;
-      display: grid;
-      gap: 16px;
-    }
-
-    .preview-panel {
-      border: 1px solid var(--color-border);
-      border-radius: 18px;
-      background: linear-gradient(180deg, #FFFEFC, #F7F2EA);
-      padding: 18px;
-    }
-
-    .preview-label {
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--color-ink-soft);
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-
-    .preview-poem {
-      font-family: "Cormorant Garamond", serif;
-      font-size: 1.5rem;
-      line-height: 1.38;
-      color: var(--color-ink);
-      white-space: pre-wrap;
-    }
-
-    .preview-note {
-      color: var(--color-ink-soft);
-      font-size: 0.95rem;
-      line-height: 1.7;
-    }
-
-    .main-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 300px;
-      gap: 22px;
-      padding: 10px 0 28px;
-    }
-
-    .generator-card {
-      padding: 24px;
-    }
-
-    .section-title {
-      margin: 0;
-      font-family: "Cormorant Garamond", serif;
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-
-    .section-description {
-      margin: 8px 0 0;
-      color: var(--color-ink-soft);
-      line-height: 1.72;
-      max-width: 68ch;
-    }
-
-    .controls-grid {
-      margin-top: 22px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .field {
-      display: grid;
-      gap: 8px;
-    }
-
-    .field.full {
-      grid-column: 1 / -1;
-    }
-
-    .field label {
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: var(--color-ink-soft);
-      letter-spacing: 0.01em;
-    }
-
-    .field-helper {
-      margin-top: -2px;
-      color: var(--color-ink-soft);
-      font-size: 0.81rem;
-      line-height: 1.5;
-    }
-
-    .input,
-    .select {
-      width: 100%;
-      border: 1px solid var(--color-border-strong);
-      border-radius: 12px;
-      background: var(--color-surface);
-      color: var(--color-ink);
-      padding: 12px 14px;
-      transition:
-        border-color var(--transition-fast),
-        box-shadow var(--transition-fast);
-    }
-
-    .input:focus,
-    .select:focus {
-      outline: none;
-      border-color: var(--color-sage);
-      box-shadow: 0 0 0 4px rgba(139, 147, 140, 0.14);
-    }
-
-    .checkbox-panel {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      padding: 14px;
-      border: 1px solid var(--color-border);
-      border-radius: 16px;
-      background: rgba(220, 215, 204, 0.22);
-    }
-
-    .checkbox-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--color-ink-soft);
-      font-size: 0.94rem;
-    }
-
-    .checkbox-item input {
-      accent-color: var(--color-sage-deep);
-    }
-
-    .action-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .output-shell {
-      margin-top: 22px;
-      border: 1px solid var(--color-border);
-      border-radius: 20px;
-      overflow: hidden;
-      background: #FFFDF9;
-    }
-
-    .output-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--color-border);
-      background: rgba(220, 215, 204, 0.28);
-    }
-
-    .toolbar-meta {
-      color: var(--color-ink-soft);
-      font-size: 0.86rem;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(139, 147, 140, 0.14);
-      color: var(--color-sage-deep);
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-
-    .output-content {
-      padding: 24px 22px 20px;
-    }
-
-    .poem-title {
-      margin: 0 0 10px;
-      font-family: "Cormorant Garamond", serif;
-      font-size: 2rem;
-      line-height: 1.05;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-
-    .poem-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .meta-chip {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 11px;
-      border-radius: 999px;
-      border: 1px solid var(--color-border-strong);
-      background: rgba(220, 215, 204, 0.30);
-      color: var(--color-ink-soft);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-    }
-
-    .poem-text {
-      margin: 0;
-      min-height: 190px;
-      white-space: pre-wrap;
-      font-family: "Cormorant Garamond", serif;
-      font-size: 1.58rem;
-      line-height: 1.62;
-      color: var(--color-ink);
-    }
-
-    .output-footer {
-      margin-top: 16px;
-      padding-top: 14px;
-      border-top: 1px solid var(--color-border);
-      color: var(--color-ink-soft);
-      font-size: 0.88rem;
-      line-height: 1.65;
-    }
-
-    .sidebar {
-      display: grid;
-      gap: 18px;
-      align-content: start;
-    }
-
-    .sidebar-card {
-      padding: 18px;
-    }
-
-    .sidebar-label {
-      margin: 0 0 10px;
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--color-sage-deep);
-      font-weight: 800;
-    }
-
-    .sidebar-title {
-      margin: 0;
-      font-family: "Cormorant Garamond", serif;
-      font-size: 1.5rem;
-      line-height: 1.08;
-      font-weight: 600;
-    }
-
-    .sidebar-copy {
-      margin: 10px 0 0;
-      color: var(--color-ink-soft);
-      font-size: 0.94rem;
-      line-height: 1.72;
-    }
-
-    .sponsor-box {
-      border: 1px dashed var(--color-border-strong);
-      border-radius: 16px;
-      background: rgba(220, 215, 204, 0.22);
-      padding: 16px;
-    }
-
-    .mini-list {
-      margin: 12px 0 0;
-      padding-left: 18px;
-      color: var(--color-ink-soft);
-      line-height: 1.75;
-      font-size: 0.95rem;
-    }
-
-    .code-block {
-      margin-top: 12px;
-      padding: 14px;
-      border-radius: 14px;
-      background: var(--color-code-bg);
-      border: 1px solid var(--color-border);
-      color: var(--color-ink);
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.83rem;
-      line-height: 1.65;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      padding-bottom: 56px;
-    }
-
-    .feature-card {
-      padding: 22px;
-    }
-
-    .feature-card h3 {
-      margin: 0;
-      font-family: "Cormorant Garamond", serif;
-      font-size: 1.65rem;
-      line-height: 1.06;
-      font-weight: 600;
-    }
-
-    .feature-card p {
-      margin: 10px 0 0;
-      color: var(--color-ink-soft);
-      line-height: 1.72;
-    }
-
-    .site-footer {
-      border-top: 1px solid rgba(207, 199, 184, 0.8);
-      padding: 28px 0 42px;
-    }
-
-    .footer-grid {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-      color: var(--color-ink-soft);
-      font-size: 0.9rem;
-      line-height: 1.72;
-    }
-
-    .footer-strong {
-      color: var(--color-ink);
-      font-weight: 700;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a:hover {
-      color: var(--color-sage-deep);
-    }
-
-    @media (max-width: 1024px) {
-      .hero,
-      .main-grid,
-      .feature-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-preview {
-        order: -1;
-      }
-
-      .sidebar {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 760px) {
-      .header-inner {
-        min-height: auto;
-        padding: 14px 0;
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .nav {
-        gap: 14px;
-      }
-
-      .hero {
-        padding-top: 30px;
-      }
-
-      .hero-copy,
-      .generator-card,
-      .sidebar-card,
-      .feature-card {
-        padding: 20px;
-      }
-
-      .controls-grid,
-      .checkbox-panel,
-      .sidebar,
-      .feature-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-title {
-        font-size: clamp(2.3rem, 11vw, 3.4rem);
-      }
-
-      .poem-text {
-        font-size: 1.38rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="/">
-        <div class="brand-mark">P</div>
-        <div class="brand-text">
-          <div class="brand-name">PoemFill.dev</div>
-          <div class="brand-subtitle">Structured public-domain text for mockups, editorial previews, and demos</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PoemFill.dev — Prompt Builder</title>
+    <meta
+      name="description"
+      content="PoemFill.dev prompt builder for themes, authorships, content types, and structured long-form poetic generation."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">PoemFill.dev</p>
+          <h1>Structured poem and literary prompt builder</h1>
+          <p class="hero-copy">
+            Create consistent literary prompts with aligned controls for theme, authorship,
+            source work, content type, paragraph length, tone, and optional philosophy emphasis.
+          </p>
         </div>
-      </a>
-
-      <nav class="nav" aria-label="Primary">
-        <a href="#generator">Generator</a>
-        <a href="#api">API</a>
-        <a href="#sources">Sources</a>
-        <a href="#about">About</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="hero" id="about">
-      <div class="card hero-copy">
-        <div class="eyebrow">A better lorem ipsum for editorial interfaces, demos, and developer previews</div>
-        <h1 class="hero-title">
-          Generate structured <em>public-domain</em> text
-        </h1>
-        <p class="hero-description">
-          PoemFill.dev replaces generic placeholder copy with readable public-domain poetry,
-          philosophy, and literary passages. Use it for product mockups, landing pages,
-          editorial layouts, newsletters, and developer test content that benefits from
-          stronger rhythm, texture, and readability.
-        </p>
-
-        <div class="hero-actions">
-          <a class="button button-primary" href="#generator">Generate Text</a>
-          <a class="button button-secondary" href="#api">View API Direction</a>
-        </div>
-      </div>
-
-      <div class="card hero-preview">
-        <div class="preview-panel">
-          <div class="preview-label">Sample output</div>
-          <div class="preview-poem" id="heroPreview">“Hope” is the thing with feathers —
-That perches in the soul —
-And sings the tune without the words —
-And never stops — at all —</div>
-        </div>
-
-        <div class="preview-panel">
-          <div class="preview-label">Why PoemFill.dev</div>
-          <div class="preview-note">
-            Better rhythm, better texture, and better readability than generic filler.
-            Structured output supports plain text, HTML, Markdown, and JSON.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="main-grid" id="generator">
-      <div class="card generator-card">
-        <h2 class="section-title">Structured text generator</h2>
-        <p class="section-description">
-          Generate sample output by source class, content structure, theme, author, and format.
-          This release uses a built-in demo corpus with poetry, philosophy, and literary passages,
-          organized for later API-backed expansion.
-        </p>
-
-        <div class="controls-grid">
-          <div class="field">
-            <label for="sourceClass">Source Class</label>
-            <select class="select" id="sourceClass">
-              <option value="any">Mixed Public Domain</option>
-              <option value="poem">Poem</option>
-              <option value="philosophy">Philosophy</option>
-              <option value="literary-passage">Literary Passage</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="contentType">Content Structure</label>
-            <select class="select" id="contentType">
-              <option value="paragraph">Paragraph</option>
-              <option value="lines">Lines</option>
-              <option value="stanza">Stanza</option>
-              <option value="excerpt">Short Excerpt</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="theme">Theme</label>
-            <select class="select" id="theme">
-              <option value="any">Any Theme</option>
-              <option value="hope">Hope</option>
-              <option value="nature">Nature</option>
-              <option value="reflection">Reflection</option>
-              <option value="evening">Evening</option>
-              <option value="sea">Sea</option>
-              <option value="reason">Reason</option>
-              <option value="self">Self</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="author">Author Filter</label>
-            <select class="select" id="author">
-              <option value="any">Any Author</option>
-              <option value="Emily Dickinson">Emily Dickinson</option>
-              <option value="William Shakespeare">William Shakespeare</option>
-              <option value="Marcus Aurelius">Marcus Aurelius</option>
-              <option value="Ralph Waldo Emerson">Ralph Waldo Emerson</option>
-              <option value="Walt Whitman">Walt Whitman</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="outputFormat">Output Format</label>
-            <select class="select" id="outputFormat">
-              <option value="text">Plain Text</option>
-              <option value="html">HTML</option>
-              <option value="markdown">Markdown</option>
-              <option value="json">JSON</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="amount" id="amountLabel">Paragraph Count</label>
-            <input
-              class="input"
-              id="amount"
-              type="number"
-              min="1"
-              max="12"
-              value="4"
-            />
-            <div class="field-helper" id="amountHelper">Generate 4 paragraphs of structured public-domain text.</div>
-          </div>
-
-          <div class="field full">
-            <label>Formatting Options</label>
-            <div class="checkbox-panel">
-              <label class="checkbox-item">
-                <input id="showTitle" type="checkbox" checked />
-                Show title
-              </label>
-
-              <label class="checkbox-item">
-                <input id="showAuthor" type="checkbox" checked />
-                Show author
-              </label>
-
-              <label class="checkbox-item">
-                <input id="preserveBreaks" type="checkbox" checked />
-                Preserve line breaks
-              </label>
-
-              <label class="checkbox-item">
-                <input id="compactSpacing" type="checkbox" />
-                Compact spacing
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="action-row">
-          <button class="button button-primary" id="generateButton" type="button">Generate</button>
-          <button class="button button-secondary" id="copyButton" type="button">Copy</button>
-          <button class="button button-secondary" id="downloadButton" type="button">Download TXT</button>
-          <button class="button button-secondary" id="resetButton" type="button">Reset</button>
-        </div>
-
-        <div class="output-shell" aria-live="polite">
-          <div class="output-toolbar">
-            <div class="toolbar-meta" id="metaLine">Source: Demo corpus · Format: Plain Text</div>
-            <div class="status-pill" id="statusLine">Ready</div>
-          </div>
-
-          <div class="output-content">
-            <h3 class="poem-title" id="outputTitle">Hope is the Thing with Feathers</h3>
-
-            <div class="poem-meta" id="outputMeta">
-              <span class="meta-chip" id="metaAuthor">Emily Dickinson</span>
-              <span class="meta-chip" id="metaTheme">Hope</span>
-              <span class="meta-chip" id="metaSourceClass">Poem</span>
-              <span class="meta-chip" id="metaRights">Public-domain demo corpus</span>
-            </div>
-
-            <pre class="poem-text" id="outputText"></pre>
-
-            <div class="output-footer">
-              Curated from public-domain source text and demo-compatible structured records pending broader source expansion.
-              Future API delivery can return the same assembled output with source metadata and machine-readable descriptors.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <aside class="sidebar">
-        <div class="card sidebar-card">
-          <div class="sidebar-label">Sponsored</div>
-          <div class="sponsor-box">
-            <h3 class="sidebar-title">Sponsor this placement</h3>
-            <p class="sidebar-copy">
-              Reach designers and developers using PoemFill.dev for previews, mockups, and test content.
-            </p>
-          </div>
-        </div>
-
-        <div class="card sidebar-card">
-          <div class="sidebar-label">Use Cases</div>
-          <h3 class="sidebar-title">Built for practical placeholder use</h3>
-          <ul class="mini-list">
-            <li>Landing page content previews</li>
-            <li>Editorial and publishing mockups</li>
-            <li>Newsletter and product email layouts</li>
-            <li>App cards, modals, and demo dashboards</li>
+        <div class="hero-card">
+          <p class="hero-card__label">Phase 1 Frontend</p>
+          <ul class="hero-card__list">
+            <li>Separated HTML, CSS, and JS</li>
+            <li>Stable layout and prompt logic</li>
+            <li>Ready for future admin portal wiring</li>
           </ul>
         </div>
+      </header>
 
-        <div class="card sidebar-card" id="api">
-          <div class="sidebar-label">API Direction</div>
-          <h3 class="sidebar-title">Developer-ready output path</h3>
-          <p class="sidebar-copy">
-            The public site is only the first layer. A future API can support usage-based access,
-            programmatic generation, and export-ready output across multiple public-domain source classes.
-          </p>
-          <div class="code-block">GET /api/v1/generate?sourceClass=poem&type=lines&theme=hope&count=4&format=json</div>
-        </div>
-      </aside>
-    </section>
+      <main class="workspace">
+        <section class="panel panel--form" aria-labelledby="builder-title">
+          <div class="panel__header">
+            <div>
+              <h2 id="builder-title">Prompt Controls</h2>
+              <p class="panel__subcopy">
+                Select the literary structure you want. The preview updates live as you change fields.
+              </p>
+            </div>
+            <span class="status-pill">Static MVP</span>
+          </div>
 
-    <section class="feature-grid" id="sources">
-      <div class="card feature-card">
-        <div class="sidebar-label">Readable filler</div>
-        <h3>Better visual rhythm than generic lorem ipsum</h3>
-        <p>
-          PoemFill.dev produces text with stronger cadence, shape, and readability for
-          interfaces that need more than abstract placeholder copy.
-        </p>
-      </div>
+          <form id="prompt-form" class="builder-form" novalidate>
+            <div id="form-alert" class="alert is-hidden" role="alert" aria-live="polite"></div>
 
-      <div class="card feature-card">
-        <div class="sidebar-label">Flexible output</div>
-        <h3>Structured for design, content, and engineering</h3>
-        <p>
-          Return plain text, HTML, Markdown, or JSON depending on whether the goal is
-          browser rendering, testing, prototyping, or data-driven output.
-        </p>
-      </div>
+            <section class="form-section">
+              <div class="section-heading">
+                <h3>Core Direction</h3>
+                <p>Choose the primary output structure and thematic foundation.</p>
+              </div>
 
-      <div class="card feature-card">
-        <div class="sidebar-label">Source policy</div>
-        <h3>Built around verified public-domain direction</h3>
-        <p>
-          Organize the corpus for verified public-domain poetry, philosophy, and literary
-          passages before scaling the library or introducing API-backed retrieval.
-        </p>
-      </div>
-    </section>
-  </main>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="themeSelect">Theme</label>
+                  <select id="themeSelect" name="theme"></select>
+                  <p class="field-help" id="themeHelp"></p>
+                </div>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <span class="footer-strong">PoemFill.dev</span><br />
-        Structured public-domain text for mockups, design previews, editorial layouts, and developer testing.
-      </div>
+                <div class="field">
+                  <label for="contentTypeSelect">Content Type</label>
+                  <select id="contentTypeSelect" name="contentType">
+                    <option value="poem">Poem</option>
+                    <option value="lyric-essay">Lyric Essay</option>
+                    <option value="dramatic-monologue">Dramatic Monologue</option>
+                    <option value="verse-sequence">Verse Sequence</option>
+                    <option value="hybrid-meditation">Hybrid Meditation</option>
+                  </select>
+                </div>
 
-      <div class="footer-links">
-        <a href="#generator">Generator</a>
-        <a href="#api">API</a>
-        <a href="#sources">Sources</a>
-        <a href="#about">About</a>
-      </div>
+                <div class="field">
+                  <label for="toneSelect">Tone</label>
+                  <select id="toneSelect" name="tone">
+                    <option value="reflective">Reflective</option>
+                    <option value="solemn">Solemn</option>
+                    <option value="searching">Searching</option>
+                    <option value="visionary">Visionary</option>
+                    <option value="devotional">Devotional</option>
+                    <option value="analytical">Analytical</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="languageStyleSelect">Language Style</label>
+                  <select id="languageStyleSelect" name="languageStyle">
+                    <option value="elevated-modern">Elevated Modern English</option>
+                    <option value="classical-leaning">Classical-Leaning English</option>
+                    <option value="plain-literary">Plain Literary English</option>
+                    <option value="ornate">Ornate Literary English</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="section-heading">
+                <h3>Authorship and Source Guidance</h3>
+                <p>Match the output to a literary mode and optional work reference.</p>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label for="authorshipSelect">Authorship</label>
+                  <select id="authorshipSelect" name="authorship"></select>
+                  <p class="field-help" id="authorshipHelp"></p>
+                </div>
+
+                <div class="field">
+                  <label for="workSelect">Work Reference</label>
+                  <select id="workSelect" name="work"></select>
+                  <p class="field-help" id="workHelp"></p>
+                </div>
+
+                <div class="field field--span-2">
+                  <label for="subjectInput">Subject / Focus</label>
+                  <input
+                    id="subjectInput"
+                    name="subject"
+                    type="text"
+                    maxlength="180"
+                    placeholder="Example: grief after a public failure, divine patience, urban solitude, moral repair"
+                  />
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="section-heading">
+                <h3>Length and Composition</h3>
+                <p>Set the output scale so the generated prompt asks for enough substance.</p>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label for="lengthPresetSelect">Length / Count</label>
+                  <select id="lengthPresetSelect" name="lengthPreset">
+                    <option value="short">Short</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="long">Long</option>
+                    <option value="extended">Extended</option>
+                    <option value="developer">Developer Long Form</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="stanzaCountInput">Stanza / Section Count</label>
+                  <input id="stanzaCountInput" name="stanzaCount" type="number" min="1" max="24" value="8" />
+                </div>
+
+                <div class="field">
+                  <label for="lineRangeInput">Approx. Lines Per Section</label>
+                  <input id="lineRangeInput" name="lineRange" type="text" maxlength="30" value="6–10" />
+                </div>
+
+                <div class="field">
+                  <label for="paragraphDensitySelect">Paragraph Density</label>
+                  <select id="paragraphDensitySelect" name="paragraphDensity">
+                    <option value="minimal">Minimal</option>
+                    <option value="balanced" selected>Balanced</option>
+                    <option value="expanded">Expanded</option>
+                    <option value="long-paragraphs">Long Paragraphs</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="section-heading">
+                <h3>Optional Enrichments</h3>
+                <p>Add philosophical framing, biblical cadence, imagery density, and formal discipline.</p>
+              </div>
+
+              <div class="checkbox-grid">
+                <label class="check-card">
+                  <input type="checkbox" id="philosophyToggle" name="philosophy" checked />
+                  <span>
+                    <strong>Philosophy highlights</strong>
+                    <small>Blend reflective philosophical ideas into longer passages.</small>
+                  </span>
+                </label>
+
+                <label class="check-card">
+                  <input type="checkbox" id="scriptureToggle" name="scripture" />
+                  <span>
+                    <strong>Biblical cadence</strong>
+                    <small>Allow scriptural resonance without direct quotation unless requested.</small>
+                  </span>
+                </label>
+
+                <label class="check-card">
+                  <input type="checkbox" id="imageryToggle" name="imagery" checked />
+                  <span>
+                    <strong>Dense imagery</strong>
+                    <small>Increase visual language, symbolism, and sensory texture.</small>
+                  </span>
+                </label>
+
+                <label class="check-card">
+                  <input type="checkbox" id="rhetoricToggle" name="rhetoric" />
+                  <span>
+                    <strong>Formal rhetoric</strong>
+                    <small>Use disciplined repetition, argument flow, and controlled emphasis.</small>
+                  </span>
+                </label>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="section-heading">
+                <h3>Instruction Notes</h3>
+                <p>Add specific constraints or output requests for this run.</p>
+              </div>
+
+              <div class="field-grid">
+                <div class="field field--span-2">
+                  <label for="notesInput">Additional Instructions</label>
+                  <textarea
+                    id="notesInput"
+                    name="notes"
+                    rows="5"
+                    maxlength="1200"
+                    placeholder="Example: avoid clichés, keep the closing stanza redemptive but unresolved, use restrained alliteration, avoid direct archaic imitation."
+                  ></textarea>
+                </div>
+              </div>
+            </section>
+
+            <div class="button-row">
+              <button type="button" class="button button--primary" id="generateButton">Refresh Prompt</button>
+              <button type="button" class="button" id="copyButton">Copy Prompt</button>
+              <button type="button" class="button" id="downloadButton">Download .txt</button>
+              <button type="reset" class="button button--ghost" id="resetButton">Reset</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="panel panel--preview" aria-labelledby="preview-title">
+          <div class="panel__header">
+            <div>
+              <h2 id="preview-title">Live Prompt Preview</h2>
+              <p class="panel__subcopy">This output is ready to paste into your generation workflow.</p>
+            </div>
+            <span class="status-pill status-pill--accent" id="wordCountBadge">0 words</span>
+          </div>
+
+          <div class="preview-meta">
+            <div>
+              <span class="meta-label">Selected Theme</span>
+              <strong id="summaryTheme">—</strong>
+            </div>
+            <div>
+              <span class="meta-label">Selected Authorship</span>
+              <strong id="summaryAuthorship">—</strong>
+            </div>
+            <div>
+              <span class="meta-label">Selected Work</span>
+              <strong id="summaryWork">—</strong>
+            </div>
+          </div>
+
+          <label class="preview-label" for="promptOutput">Generated Prompt</label>
+          <textarea id="promptOutput" class="prompt-output" rows="22" readonly></textarea>
+        </aside>
+      </main>
     </div>
-  </footer>
 
-  <script>
-    const poemCorpus = [
-      {
-        id: "emily-dickinson-hope",
-        sourceClass: "poem",
-        title: "Hope is the Thing with Feathers",
-        author: "Emily Dickinson",
-        theme: "hope",
-        lines: [
-          "“Hope” is the thing with feathers —",
-          "That perches in the soul —",
-          "And sings the tune without the words —",
-          "And never stops — at all —"
-        ]
-      },
-      {
-        id: "william-shakespeare-sea",
-        sourceClass: "poem",
-        title: "Sea Change",
-        author: "William Shakespeare",
-        theme: "sea",
-        lines: [
-          "Full fathom five thy father lies;",
-          "Of his bones are coral made;",
-          "Those are pearls that were his eyes;",
-          "Nothing of him that doth fade."
-        ]
-      },
-      {
-        id: "marcus-aurelius-reason",
-        sourceClass: "philosophy",
-        title: "On the Directing Mind",
-        author: "Marcus Aurelius",
-        theme: "reason",
-        lines: [
-          "You have power over your mind — not outside events.",
-          "Realize this, and you will find strength.",
-          "The directing mind, when true to nature,",
-          "stands clear in its own work."
-        ]
-      },
-      {
-        id: "ralph-waldo-emerson-nature",
-        sourceClass: "philosophy",
-        title: "Transparent Eyeball",
-        author: "Ralph Waldo Emerson",
-        theme: "nature",
-        lines: [
-          "Standing on the bare ground — my head bathed by the blithe air,",
-          "and uplifted into infinite space — all mean egotism vanishes.",
-          "I become a transparent eye-ball;",
-          "I am nothing; I see all."
-        ]
-      },
-      {
-        id: "walt-whitman-reflection",
-        sourceClass: "literary-passage",
-        title: "Open Road Reflection",
-        author: "Walt Whitman",
-        theme: "reflection",
-        lines: [
-          "I take to the open road, healthy, free, the world before me,",
-          "The long brown path before me leading wherever I choose.",
-          "Henceforth I ask not good-fortune, I myself am good-fortune,",
-          "Henceforth I whimper no more, postpone no more, need nothing."
-        ]
-      },
-      {
-        id: "william-shakespeare-evening",
-        sourceClass: "literary-passage",
-        title: "The Dying of the Day",
-        author: "William Shakespeare",
-        theme: "evening",
-        lines: [
-          "That time of year thou mayst in me behold",
-          "When yellow leaves, or none, or few, do hang",
-          "Upon those boughs which shake against the cold,",
-          "Bare ruin'd choirs, where late the sweet birds sang."
-        ]
-      },
-      {
-        id: "ralph-waldo-emerson-self",
-        sourceClass: "philosophy",
-        title: "Trust Thyself",
-        author: "Ralph Waldo Emerson",
-        theme: "self",
-        lines: [
-          "Trust thyself: every heart vibrates to that iron string.",
-          "Accept the place the divine providence has found for you;",
-          "the society of your contemporaries, the connection of events.",
-          "Great men have always done so."
-        ]
-      }
-    ];
-
-    const STRUCTURE_LABELS = {
-      paragraph: "Paragraph Count",
-      lines: "Line Count",
-      stanza: "Stanza Count",
-      excerpt: "Excerpt Size"
-    };
-
-    const STRUCTURE_HELPERS = {
-      paragraph: "Generate 4 paragraphs of structured public-domain text.",
-      lines: "Generate an exact number of lines.",
-      stanza: "Generate grouped stanza blocks.",
-      excerpt: "Generate a short excerpt sized by word length."
-    };
-
-    const elements = {
-      sourceClass: document.getElementById("sourceClass"),
-      contentType: document.getElementById("contentType"),
-      theme: document.getElementById("theme"),
-      author: document.getElementById("author"),
-      outputFormat: document.getElementById("outputFormat"),
-      amount: document.getElementById("amount"),
-      amountLabel: document.getElementById("amountLabel"),
-      amountHelper: document.getElementById("amountHelper"),
-      showTitle: document.getElementById("showTitle"),
-      showAuthor: document.getElementById("showAuthor"),
-      preserveBreaks: document.getElementById("preserveBreaks"),
-      compactSpacing: document.getElementById("compactSpacing"),
-      generateButton: document.getElementById("generateButton"),
-      copyButton: document.getElementById("copyButton"),
-      downloadButton: document.getElementById("downloadButton"),
-      resetButton: document.getElementById("resetButton"),
-      heroPreview: document.getElementById("heroPreview"),
-      outputTitle: document.getElementById("outputTitle"),
-      outputMeta: document.getElementById("outputMeta"),
-      outputText: document.getElementById("outputText"),
-      metaLine: document.getElementById("metaLine"),
-      statusLine: document.getElementById("statusLine"),
-      metaAuthor: document.getElementById("metaAuthor"),
-      metaTheme: document.getElementById("metaTheme"),
-      metaSourceClass: document.getElementById("metaSourceClass"),
-      metaRights: document.getElementById("metaRights")
-    };
-
-    function toTitleCase(value) {
-      return value
-        .split("-")
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(" ");
-    }
-
-    function clampAmount(value) {
-      return Math.max(1, Math.min(12, Number.isFinite(value) ? value : 4));
-    }
-
-    function getRequestState() {
-      return {
-        sourceClass: elements.sourceClass.value,
-        contentType: elements.contentType.value,
-        theme: elements.theme.value,
-        author: elements.author.value,
-        outputFormat: elements.outputFormat.value,
-        amount: clampAmount(Number(elements.amount.value || 4)),
-        options: {
-          showTitle: elements.showTitle.checked,
-          showAuthor: elements.showAuthor.checked,
-          preserveBreaks: elements.preserveBreaks.checked,
-          compactSpacing: elements.compactSpacing.checked
-        }
-      };
-    }
-
-    function updateAmountUi() {
-      const contentType = elements.contentType.value;
-      elements.amountLabel.textContent = STRUCTURE_LABELS[contentType] || "Length / Count";
-      elements.amountHelper.textContent = STRUCTURE_HELPERS[contentType] || "Set the output amount.";
-    }
-
-    function resolveCorpusEntries(request) {
-      let filteredEntries = poemCorpus.filter((entry) => {
-        const sourceClassMatch = request.sourceClass === "any" || entry.sourceClass === request.sourceClass;
-        const themeMatch = request.theme === "any" || entry.theme === request.theme;
-        const authorMatch = request.author === "any" || entry.author === request.author;
-        return sourceClassMatch && themeMatch && authorMatch;
-      });
-
-      let fallbackApplied = false;
-
-      if (filteredEntries.length === 0) {
-        fallbackApplied = true;
-        filteredEntries = poemCorpus.filter((entry) => {
-          const sourceClassMatch = request.sourceClass === "any" || entry.sourceClass === request.sourceClass;
-          const themeMatch = request.theme === "any" || entry.theme === request.theme;
-          return sourceClassMatch && themeMatch;
-        });
-      }
-
-      if (filteredEntries.length === 0) {
-        fallbackApplied = true;
-        filteredEntries = poemCorpus.filter((entry) => {
-          return request.sourceClass === "any" || entry.sourceClass === request.sourceClass;
-        });
-      }
-
-      if (filteredEntries.length === 0) {
-        fallbackApplied = true;
-        filteredEntries = [...poemCorpus];
-      }
-
-      return {
-        entries: filteredEntries,
-        fallbackApplied
-      };
-    }
-
-    function rotateEntries(entries, count) {
-      const output = [];
-      for (let index = 0; index < count; index += 1) {
-        output.push(entries[index % entries.length]);
-      }
-      return output;
-    }
-
-    function buildParagraphOutput(entries, amount) {
-      const selectedEntries = rotateEntries(entries, amount);
-      return selectedEntries
-        .map((entry) => entry.lines.join(" ").replace(/\s+/g, " ").trim())
-        .join("\n\n");
-    }
-
-    function buildLinesOutput(entries, amount) {
-      const selectedEntries = rotateEntries(entries, Math.max(1, Math.ceil(amount / 4)));
-      const combinedLines = selectedEntries.flatMap((entry) => entry.lines);
-      return combinedLines.slice(0, amount).join("\n");
-    }
-
-    function buildStanzaOutput(entries, amount) {
-      const selectedEntries = rotateEntries(entries, amount);
-      return selectedEntries
-        .map((entry) => entry.lines.join("\n"))
-        .join("\n\n");
-    }
-
-    function buildExcerptOutput(entries, amount) {
-      const selectedEntries = rotateEntries(entries, Math.max(1, Math.ceil(amount / 2)));
-      const combinedText = selectedEntries
-        .map((entry) => entry.lines.join(" "))
-        .join(" ")
-        .replace(/\s+/g, " ")
-        .trim();
-
-      const excerptWords = combinedText.split(" ").slice(0, Math.max(12, amount * 8));
-      return excerptWords.join(" ").replace(/[\s.,;:!?-]+$/, "") + ".";
-    }
-
-    function buildBody(entries, type, amount, options) {
-      let body = "";
-
-      if (type === "lines") {
-        body = buildLinesOutput(entries, amount);
-      } else if (type === "stanza") {
-        body = buildStanzaOutput(entries, amount);
-      } else if (type === "excerpt") {
-        body = buildExcerptOutput(entries, amount);
-      } else {
-        body = buildParagraphOutput(entries, amount);
-      }
-
-      if (!options.preserveBreaks) {
-        body = body.replace(/\n+/g, " ");
-      }
-
-      if (options.compactSpacing) {
-        body = body
-          .replace(/\n{3,}/g, "\n\n")
-          .replace(/[ ]{2,}/g, " ")
-          .trim();
-      }
-
-      return body.trim();
-    }
-
-    function escapeHtml(value) {
-      return value
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
-
-    function formatOutput(primaryEntry, entries, body, request, matchedEntries, fallbackApplied) {
-      const uniqueAuthors = [...new Set(entries.map((entry) => entry.author))];
-      const hasMixedAuthors = uniqueAuthors.length > 1;
-
-      const resolvedTitle = hasMixedAuthors || request.sourceClass === "any"
-        ? "Generated Public-Domain Selection"
-        : primaryEntry.title;
-
-      const resolvedAuthor = hasMixedAuthors
-        ? uniqueAuthors.join(" · ")
-        : primaryEntry.author;
-
-      const displayTitle = request.options.showTitle ? resolvedTitle : "";
-      const displayAuthor = request.options.showAuthor ? resolvedAuthor : "";
-
-      if (request.outputFormat === "html") {
-        const heading = request.options.showTitle ? `  <h3>${escapeHtml(resolvedTitle)}</h3>\n` : "";
-        const byline = request.options.showAuthor ? `  <p><em>${escapeHtml(resolvedAuthor)}</em></p>\n` : "";
-        return `<article>\n${heading}${byline}  <div>${escapeHtml(body).replace(/\n/g, "<br />")}</div>\n</article>`;
-      }
-
-      if (request.outputFormat === "markdown") {
-        const heading = request.options.showTitle ? `### ${resolvedTitle}\n` : "";
-        const byline = request.options.showAuthor ? `*${resolvedAuthor}*\n\n` : "";
-        return `${heading}${byline}${body}`;
-      }
-
-      if (request.outputFormat === "json") {
-        return JSON.stringify(
-          {
-            success: true,
-            sourceType: "structured-public-domain-demo",
-            fallbackApplied,
-            request: {
-              sourceClass: request.sourceClass,
-              contentType: request.contentType,
-              theme: request.theme,
-              author: request.author,
-              amount: request.amount,
-              outputFormat: request.outputFormat
-            },
-            result: {
-              title: displayTitle || null,
-              author: displayAuthor || null,
-              sourceClass: request.sourceClass === "any" ? "mixed-public-domain" : primaryEntry.sourceClass,
-              matchedEntries,
-              text: body
-            }
-          },
-          null,
-          2
-        );
-      }
-
-      let prefix = "";
-
-      if (request.options.showTitle) {
-        prefix += `${resolvedTitle}\n`;
-      }
-
-      if (request.options.showAuthor) {
-        prefix += `— ${resolvedAuthor}\n\n`;
-      }
-
-      return `${prefix}${body}`.trim();
-    }
-
-    function updateOutput() {
-      updateAmountUi();
-
-      const request = getRequestState();
-      elements.amount.value = request.amount;
-
-      const { entries, fallbackApplied } = resolveCorpusEntries(request);
-      const primaryEntry = entries[0];
-      const body = buildBody(entries, request.contentType, request.amount, request.options);
-      const formattedOutput = formatOutput(primaryEntry, entries, body, request, entries.length, fallbackApplied);
-
-      const uniqueAuthors = [...new Set(entries.map((entry) => entry.author))];
-      const uniqueThemes = [...new Set(entries.map((entry) => entry.theme))];
-      const uniqueSourceClasses = [...new Set(entries.map((entry) => entry.sourceClass))];
-
-      const hasMixedAuthors = uniqueAuthors.length > 1;
-      const hasMixedThemes = uniqueThemes.length > 1;
-      const hasMixedSourceClasses = uniqueSourceClasses.length > 1;
-
-      const resolvedTitle = hasMixedAuthors || request.sourceClass === "any"
-        ? "Generated Public-Domain Selection"
-        : primaryEntry.title;
-
-      const resolvedAuthor = hasMixedAuthors
-        ? uniqueAuthors.join(" · ")
-        : primaryEntry.author;
-
-      const resolvedTheme = hasMixedThemes
-        ? "Mixed"
-        : toTitleCase(primaryEntry.theme);
-
-      const resolvedSourceClass = hasMixedSourceClasses || request.sourceClass === "any"
-        ? "Mixed Public Domain"
-        : toTitleCase(primaryEntry.sourceClass);
-
-      elements.outputTitle.textContent = request.options.showTitle ? resolvedTitle : "Generated Output";
-      elements.metaAuthor.textContent = resolvedAuthor;
-      elements.metaTheme.textContent = resolvedTheme;
-      elements.metaSourceClass.textContent = resolvedSourceClass;
-      elements.metaRights.textContent = "Public-domain demo corpus";
-      elements.outputText.textContent = formattedOutput;
-      elements.metaLine.textContent =
-        `Source: Demo corpus · Class: ${resolvedSourceClass} · Theme: ${resolvedTheme} · Format: ${request.outputFormat}`;
-      elements.statusLine.textContent = fallbackApplied ? "Generated with fallback match" : "Generated";
-      elements.heroPreview.textContent = primaryEntry.lines.join("\n");
-
-      if (!request.options.showTitle && !request.options.showAuthor) {
-        elements.outputMeta.style.display = "none";
-      } else {
-        elements.outputMeta.style.display = "flex";
-      }
-    }
-
-    async function copyOutputToClipboard() {
-      try {
-        await navigator.clipboard.writeText(elements.outputText.textContent);
-        elements.statusLine.textContent = "Copied to clipboard";
-      } catch (error) {
-        elements.statusLine.textContent = "Copy blocked by browser";
-      }
-    }
-
-    function downloadOutput() {
-      const blob = new Blob([elements.outputText.textContent], {
-        type: "text/plain;charset=utf-8"
-      });
-
-      const objectUrl = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-
-      link.href = objectUrl;
-      link.download = "poemfill-output.txt";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      window.setTimeout(() => {
-        URL.revokeObjectURL(objectUrl);
-      }, 200);
-
-      elements.statusLine.textContent = "TXT download started";
-    }
-
-    function resetControls() {
-      elements.sourceClass.value = "any";
-      elements.contentType.value = "paragraph";
-      elements.theme.value = "any";
-      elements.author.value = "any";
-      elements.outputFormat.value = "text";
-      elements.amount.value = 4;
-      elements.showTitle.checked = true;
-      elements.showAuthor.checked = true;
-      elements.preserveBreaks.checked = true;
-      elements.compactSpacing.checked = false;
-      updateOutput();
-      elements.statusLine.textContent = "Reset complete";
-    }
-
-    elements.contentType.addEventListener("change", updateAmountUi);
-    elements.generateButton.addEventListener("click", updateOutput);
-    elements.copyButton.addEventListener("click", copyOutputToClipboard);
-    elements.downloadButton.addEventListener("click", downloadOutput);
-    elements.resetButton.addEventListener("click", resetControls);
-
-    updateAmountUi();
-    updateOutput();
-  </script>
-</body>
+    <script src="assets/js/app.js"></script>
+  </body>
 </html>
