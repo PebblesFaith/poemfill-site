@@ -1,629 +1,731 @@
-// File: assets/js/app.js
+/* File: assets/css/styles.css */
 
-const themeData = [
-  {
-    id: 'redemption',
-    name: 'Redemption After Ruin',
-    shortDescription: 'Recovery, repair, moral return, and spiritual endurance after collapse.',
-    promptNotes: 'Keep the emotional arc serious, layered, and hard-won rather than sentimental.'
-  },
-  {
-    id: 'solitude',
-    name: 'Urban Solitude',
-    shortDescription: 'Interior thought, distance, crowded isolation, and quiet self-examination.',
-    promptNotes: 'Use city textures, restrained movement, and a contemplative social backdrop.'
-  },
-  {
-    id: 'wisdom',
-    name: 'Wisdom and Discipline',
-    shortDescription: 'Study, judgment, patience, inward regulation, and earned understanding.',
-    promptNotes: 'Favor measured language, reflective transitions, and intellectual clarity.'
-  },
-  {
-    id: 'lament',
-    name: 'Sacred Lament',
-    shortDescription: 'Petition, grief, trust under pressure, and reverent address.',
-    promptNotes: 'Balance sorrow with disciplined hope and controlled devotional language.'
+:root {
+  --font-ui: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 12px;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 16px 40px rgba(20, 24, 33, 0.06);
+  --shadow-hover: 0 12px 30px rgba(20, 24, 33, 0.09);
+  --transition-fast: 140ms ease;
+}
+
+html[data-theme="palette-a"] {
+  --bg-top: #eaf1fb;
+  --bg: #f5f8fc;
+  --surface: #ffffff;
+  --surface-alt: #f8fbff;
+  --surface-muted: #eef4ff;
+  --text: #1e293b;
+  --text-soft: #475569;
+  --border: #dce6f2;
+  --border-strong: #c7d6e8;
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+  --accent-soft: #e9f1ff;
+  --chip-bg: #eaf1f8;
+  --code-bg: #eef4ff;
+  --success-soft: #e9f7ef;
+  --success-text: #1f6a42;
+  --danger-soft: #fef0f0;
+  --danger-text: #9c2d2d;
+  --focus-ring: rgba(37, 99, 235, 0.16);
+}
+
+html[data-theme="palette-b"],
+html:not([data-theme]) {
+  --bg-top: #ede8df;
+  --bg: #f7f5f0;
+  --surface: #fffdf9;
+  --surface-alt: #f4efe6;
+  --surface-muted: #efebe3;
+  --text: #2b211a;
+  --text-soft: #5a5148;
+  --border: #dcd7cc;
+  --border-strong: #c9c2b5;
+  --accent: #8b938c;
+  --accent-strong: #6f786f;
+  --accent-soft: #ebe8e0;
+  --chip-bg: #f0ece4;
+  --code-bg: #f3efe7;
+  --success-soft: #edf4ee;
+  --success-text: #4d6d55;
+  --danger-soft: #f7ece9;
+  --danger-text: #8e3c36;
+  --focus-ring: rgba(139, 147, 140, 0.18);
+}
+
+html[data-theme="palette-c"] {
+  --bg-top: #eef1f4;
+  --bg: #f8f8f6;
+  --surface: #ffffff;
+  --surface-alt: #f4f6f7;
+  --surface-muted: #eef1f5;
+  --text: #22252b;
+  --text-soft: #5c6270;
+  --border: #d8dde6;
+  --border-strong: #c7ced9;
+  --accent: #7c8da6;
+  --accent-strong: #5f718c;
+  --accent-soft: #edf1f5;
+  --chip-bg: #eef1f5;
+  --code-bg: #f4f6f9;
+  --success-soft: #edf3f1;
+  --success-text: #456262;
+  --danger-soft: #f6efef;
+  --danger-text: #924848;
+  --focus-ring: rgba(124, 141, 166, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 220px);
+  font-family: var(--font-ui);
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.site-shell {
+  width: min(1380px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 30px 0 56px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(320px, 420px);
+  gap: 24px;
+  align-items: stretch;
+  margin-bottom: 26px;
+}
+
+.hero-copy-block {
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.eyebrow--muted {
+  margin-bottom: 8px;
+  color: var(--text-soft);
+}
+
+.hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.7rem, 5vw, 4.5rem);
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  max-width: 10.5ch;
+}
+
+.hero-copy {
+  margin: 18px 0 0;
+  max-width: 68ch;
+  color: var(--text-soft);
+  font-size: 1.02rem;
+  line-height: 1.76;
+}
+
+.hero-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--chip-bg);
+  color: var(--text-soft);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: end;
+  margin-top: 22px;
+}
+
+.palette-switcher {
+  display: grid;
+  gap: 7px;
+  min-width: 260px;
+}
+
+.palette-switcher label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+}
+
+.palette-switcher select {
+  min-height: 48px;
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0 16px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.palette-switcher select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.hero-note {
+  margin: 0;
+  max-width: 40ch;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.hero-card,
+.panel,
+.info-card {
+  background: color-mix(in srgb, var(--surface) 92%, white 8%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+}
+
+.hero-card {
+  align-self: start;
+  padding: 24px;
+  min-width: 0;
+}
+
+.hero-card__eyebrow {
+  margin: 0 0 10px;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hero-card h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1.02;
+}
+
+.hero-card__copy {
+  margin: 14px 0 0;
+  color: var(--text-soft);
+  line-height: 1.72;
+}
+
+.hero-card__meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.hero-card__meta-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+}
+
+.hero-card__meta-item span {
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.hero-card__meta-item strong {
+  font-size: 0.92rem;
+}
+
+.hero-card__footer {
+  margin: 16px 0 0;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(360px, 0.82fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.panel {
+  padding: 24px;
+}
+
+.panel--preview {
+  position: sticky;
+  top: 20px;
+}
+
+.panel__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.panel__header h2,
+.info-card h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1.02;
+}
+
+.panel__subcopy {
+  margin: 8px 0 0;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  border-radius: var(--radius-pill);
+  padding: 0 12px;
+  background: var(--success-soft);
+  color: var(--success-text);
+  font-size: 0.8rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.status-pill--accent {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.builder-form {
+  display: grid;
+  gap: 18px;
+}
+
+.form-section {
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+}
+
+.section-heading {
+  margin-bottom: 14px;
+}
+
+.section-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.section-heading p {
+  margin: 7px 0 0;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.field--span-2 {
+  grid-column: span 2;
+}
+
+.field label,
+.preview-label {
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea,
+.prompt-output {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  padding: 12px 14px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.field input,
+.field select {
+  min-height: 48px;
+}
+
+.field textarea,
+.prompt-output {
+  resize: vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: color-mix(in srgb, var(--text-soft) 70%, white 30%);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.prompt-output:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.field-help {
+  margin: 0;
+  min-height: 1.2em;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.check-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.check-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+}
+
+.check-card input {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-strong);
+}
+
+.check-card strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.check-card small {
+  display: block;
+  color: var(--text-soft);
+  line-height: 1.45;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.button {
+  appearance: none;
+  min-height: 46px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+
+.button--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.button--primary:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+.button--ghost {
+  background: transparent;
+}
+
+.preview-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-alt);
+}
+
+.preview-meta > div {
+  min-width: 0;
+}
+
+.meta-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-soft);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.preview-meta strong {
+  display: block;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+.prompt-output {
+  min-height: 560px;
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 0.94rem;
+  line-height: 1.72;
+}
+
+.alert {
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.alert--danger {
+  background: var(--danger-soft);
+  border-color: color-mix(in srgb, var(--danger-text) 22%, white 78%);
+  color: var(--danger-text);
+}
+
+.alert--success {
+  background: var(--success-soft);
+  border-color: color-mix(in srgb, var(--success-text) 22%, white 78%);
+  color: var(--success-text);
+}
+
+.is-hidden {
+  display: none;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.info-card {
+  padding: 24px;
+}
+
+.info-card p {
+  margin: 0 0 14px;
+  color: var(--text-soft);
+  line-height: 1.72;
+}
+
+.info-card p:last-child {
+  margin-bottom: 0;
+}
+
+.info-card--code {
+  background: var(--surface);
+}
+
+.code-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.code-card__header h2 {
+  font-size: 1.9rem;
+}
+
+.code-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 11px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.code-block {
+  overflow-x: auto;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--code-bg);
+}
+
+.code-block code {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.code-note {
+  margin-top: 14px;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+}
+
+@media (max-width: 1120px) {
+  .hero,
+  .workspace,
+  .info-grid {
+    grid-template-columns: 1fr;
   }
-];
 
-const authorshipData = [
-  {
-    id: 'shakespeare',
-    name: 'William Shakespeare',
-    styleLabel: 'Elizabethan dramatic and lyrical register',
-    eraLabel: 'Early modern',
-    description: 'Controlled rhetoric, balanced clauses, dramatic turn, metaphor-rich movement.',
-    workIds: ['hamlet', 'sonnets']
-  },
-  {
-    id: 'milton',
-    name: 'John Milton',
-    styleLabel: 'High formal meditative verse',
-    eraLabel: 'Seventeenth century',
-    description: 'Long syntactic movement, elevated argument, theological and philosophical density.',
-    workIds: ['paradise-lost', 'lycidas']
-  },
-  {
-    id: 'dickinson',
-    name: 'Emily Dickinson',
-    styleLabel: 'Compressed interior lyric',
-    eraLabel: 'Nineteenth century',
-    description: 'Compression, tensile pause, spiritual inquiry, sharp image logic.',
-    workIds: ['hope-feathers', 'after-great-pain']
-  },
-  {
-    id: 'psalmic',
-    name: 'Psalmic / Biblical Cadence',
-    styleLabel: 'Devotional parallelism and petition structure',
-    eraLabel: 'Scriptural resonance',
-    description: 'Parallel lines, direct address, lament-to-confidence movement, covenantal vocabulary.',
-    workIds: ['psalm-13', 'psalm-42']
-  }
-];
-
-const workData = [
-  {
-    id: 'hamlet',
-    authorshipId: 'shakespeare',
-    name: 'Hamlet',
-    description: 'Reflective conflict, moral delay, inward argument, death-conscious introspection.',
-    promptNotes: 'Favor interior debate and sharpen the tension between thought and action.'
-  },
-  {
-    id: 'sonnets',
-    authorshipId: 'shakespeare',
-    name: 'Sonnets',
-    description: 'Argumentative lyric movement, compact turns, image-driven emotional logic.',
-    promptNotes: 'Use a clear rhetorical turn and compact thematic progression.'
-  },
-  {
-    id: 'paradise-lost',
-    authorshipId: 'milton',
-    name: 'Paradise Lost',
-    description: 'Epic scale, theological reasoning, dignified sentence flow, cosmic framing.',
-    promptNotes: 'Use sustained formal cadence and elevated meditative momentum.'
-  },
-  {
-    id: 'lycidas',
-    authorshipId: 'milton',
-    name: 'Lycidas',
-    description: 'Elegiac movement, grief shaped by classical and spiritual reflection.',
-    promptNotes: 'Keep the lament serious and rhetorically polished.'
-  },
-  {
-    id: 'hope-feathers',
-    authorshipId: 'dickinson',
-    name: '“Hope” is the thing with feathers',
-    description: 'Compression, image precision, inward force, slight but piercing architecture.',
-    promptNotes: 'Prefer distilled imagery over extended explanation.'
-  },
-  {
-    id: 'after-great-pain',
-    authorshipId: 'dickinson',
-    name: 'After great pain, a formal feeling comes',
-    description: 'Psychological aftermath, interior stillness, measured shock, exact phrasing.',
-    promptNotes: 'Keep tension tight and avoid ornamental excess.'
-  },
-  {
-    id: 'psalm-13',
-    authorshipId: 'psalmic',
-    name: 'Psalm 13 cadence',
-    description: 'Complaint, petition, trust, and compressed devotional reversal.',
-    promptNotes: 'Use direct address, urgency, and a final motion toward trust.'
-  },
-  {
-    id: 'psalm-42',
-    authorshipId: 'psalmic',
-    name: 'Psalm 42 cadence',
-    description: 'Longing, remembered worship, thirst, self-address, refrain structure.',
-    promptNotes: 'Let the poem move through memory, longing, and disciplined hope.'
-  }
-];
-
-const lengthPresets = {
-  short: {
-    stanzaCount: 4,
-    lineRange: '4–6',
-    paragraphDensity: 'minimal',
-    guidance: 'Keep the piece concise and sharply focused.'
-  },
-  medium: {
-    stanzaCount: 8,
-    lineRange: '6–10',
-    paragraphDensity: 'balanced',
-    guidance: 'Provide a complete thematic arc with enough depth for development.'
-  },
-  long: {
-    stanzaCount: 12,
-    lineRange: '8–12',
-    paragraphDensity: 'expanded',
-    guidance: 'Allow multiple transitions and a fuller emotional or intellectual progression.'
-  },
-  extended: {
-    stanzaCount: 16,
-    lineRange: '10–14',
-    paragraphDensity: 'long-paragraphs',
-    guidance: 'Develop a substantial multi-part composition with layered movement.'
-  },
-  developer: {
-    stanzaCount: 18,
-    lineRange: '12–16',
-    paragraphDensity: 'long-paragraphs',
-    guidance: 'Generate a materially longer output suitable for deeper literary development and extended paragraph treatment.'
-  }
-};
-
-const DEFAULT_LENGTH_PRESET = 'medium';
-const DEFAULT_THEME_ID = themeData[0]?.id || '';
-const DEFAULT_AUTHORSHIP_ID = authorshipData[0]?.id || '';
-const DEFAULT_TOGGLE_STATE = {
-  philosophy: true,
-  scripture: false,
-  imagery: true,
-  rhetoric: false
-};
-
-const elements = {
-  form: document.getElementById('prompt-form'),
-  alert: document.getElementById('form-alert'),
-  themeSelect: document.getElementById('themeSelect'),
-  authorshipSelect: document.getElementById('authorshipSelect'),
-  workSelect: document.getElementById('workSelect'),
-  contentTypeSelect: document.getElementById('contentTypeSelect'),
-  toneSelect: document.getElementById('toneSelect'),
-  languageStyleSelect: document.getElementById('languageStyleSelect'),
-  subjectInput: document.getElementById('subjectInput'),
-  lengthPresetSelect: document.getElementById('lengthPresetSelect'),
-  stanzaCountInput: document.getElementById('stanzaCountInput'),
-  lineRangeInput: document.getElementById('lineRangeInput'),
-  paragraphDensitySelect: document.getElementById('paragraphDensitySelect'),
-  philosophyToggle: document.getElementById('philosophyToggle'),
-  scriptureToggle: document.getElementById('scriptureToggle'),
-  imageryToggle: document.getElementById('imageryToggle'),
-  rhetoricToggle: document.getElementById('rhetoricToggle'),
-  notesInput: document.getElementById('notesInput'),
-  themeHelp: document.getElementById('themeHelp'),
-  authorshipHelp: document.getElementById('authorshipHelp'),
-  workHelp: document.getElementById('workHelp'),
-  promptOutput: document.getElementById('promptOutput'),
-  summaryTheme: document.getElementById('summaryTheme'),
-  summaryAuthorship: document.getElementById('summaryAuthorship'),
-  summaryWork: document.getElementById('summaryWork'),
-  wordCountBadge: document.getElementById('wordCountBadge'),
-  copyButton: document.getElementById('copyButton'),
-  downloadButton: document.getElementById('downloadButton'),
-  generateButton: document.getElementById('generateButton')
-};
-
-function setSelectOptions(selectElement, items) {
-  if (!selectElement) return;
-
-  selectElement.innerHTML = items
-    .map((item) => `<option value="${item.id}">${item.name}</option>`)
-    .join('');
-}
-
-function populateThemes() {
-  setSelectOptions(elements.themeSelect, themeData);
-}
-
-function populateAuthorships() {
-  setSelectOptions(elements.authorshipSelect, authorshipData);
-}
-
-function getWorksByAuthorshipId(authorshipId) {
-  return workData.filter((work) => work.authorshipId === authorshipId);
-}
-
-function populateWorks(authorshipId, selectedWorkId = '') {
-  const matchingWorks = getWorksByAuthorshipId(authorshipId);
-  setSelectOptions(elements.workSelect, matchingWorks);
-
-  if (!matchingWorks.length) {
-    return;
+  .panel--preview {
+    position: static;
+    top: auto;
   }
 
-  const hasRequestedWork = matchingWorks.some((work) => work.id === selectedWorkId);
-  elements.workSelect.value = hasRequestedWork ? selectedWorkId : matchingWorks[0].id;
-}
-
-function getThemeById(themeId) {
-  return themeData.find((theme) => theme.id === themeId) || themeData[0] || null;
-}
-
-function getAuthorshipById(authorshipId) {
-  return authorshipData.find((author) => author.id === authorshipId) || authorshipData[0] || null;
-}
-
-function getWorkById(workId, authorshipId = '') {
-  const directMatch = workData.find((work) => work.id === workId);
-  if (directMatch) {
-    return directMatch;
-  }
-
-  const matchingWorks = getWorksByAuthorshipId(authorshipId);
-  return matchingWorks[0] || workData[0] || null;
-}
-
-function syncLengthPreset() {
-  const preset = lengthPresets[elements.lengthPresetSelect.value];
-  if (!preset) return;
-
-  elements.stanzaCountInput.value = preset.stanzaCount;
-  elements.lineRangeInput.value = preset.lineRange;
-  elements.paragraphDensitySelect.value = preset.paragraphDensity;
-}
-
-function buildFallbackSubject(values) {
-  const themeName = values.theme?.name || 'the selected theme';
-  const workName = values.work?.name || 'the selected work';
-  const authorshipName = values.authorship?.name || 'the selected authorship';
-
-  return `${themeName}, shaped by ${workName} in the style of ${authorshipName}`;
-}
-
-function normalizeStanzaCount(rawValue, lengthPreset) {
-  const preset = lengthPresets[lengthPreset] || lengthPresets[DEFAULT_LENGTH_PRESET];
-  const numericValue = Number(rawValue);
-
-  if (Number.isFinite(numericValue) && numericValue >= 1) {
-    return Math.floor(numericValue);
-  }
-
-  return preset.stanzaCount;
-}
-
-function normalizeLineRange(rawValue, lengthPreset) {
-  const preset = lengthPresets[lengthPreset] || lengthPresets[DEFAULT_LENGTH_PRESET];
-  const trimmed = String(rawValue || '').trim();
-
-  return trimmed || preset.lineRange;
-}
-
-function normalizeParagraphDensity(rawValue, lengthPreset) {
-  const preset = lengthPresets[lengthPreset] || lengthPresets[DEFAULT_LENGTH_PRESET];
-  const allowedValues = new Set(['minimal', 'balanced', 'expanded', 'long-paragraphs']);
-
-  return allowedValues.has(rawValue) ? rawValue : preset.paragraphDensity;
-}
-
-function collectFormValues() {
-  const selectedTheme = getThemeById(elements.themeSelect.value);
-  const selectedAuthorship = getAuthorshipById(elements.authorshipSelect.value);
-  const selectedWork = getWorkById(elements.workSelect.value, selectedAuthorship?.id);
-
-  const rawSubject = elements.subjectInput.value.trim();
-  const lengthPreset = elements.lengthPresetSelect.value || DEFAULT_LENGTH_PRESET;
-
-  const values = {
-    theme: selectedTheme,
-    authorship: selectedAuthorship,
-    work: selectedWork,
-    contentType: elements.contentTypeSelect.value,
-    tone: elements.toneSelect.value,
-    languageStyle: elements.languageStyleSelect.value,
-    rawSubject,
-    lengthPreset,
-    stanzaCount: normalizeStanzaCount(elements.stanzaCountInput.value, lengthPreset),
-    lineRange: normalizeLineRange(elements.lineRangeInput.value, lengthPreset),
-    paragraphDensity: normalizeParagraphDensity(elements.paragraphDensitySelect.value, lengthPreset),
-    philosophy: elements.philosophyToggle.checked,
-    scripture: elements.scriptureToggle.checked,
-    imagery: elements.imageryToggle.checked,
-    rhetoric: elements.rhetoricToggle.checked,
-    notes: elements.notesInput.value.trim()
-  };
-
-  values.subject = rawSubject || buildFallbackSubject(values);
-
-  return values;
-}
-
-function validateForm(values) {
-  const errors = [];
-
-  if (!values.theme) {
-    errors.push('A theme selection is required.');
-  }
-
-  if (!values.authorship) {
-    errors.push('An authorship selection is required.');
-  }
-
-  if (!values.work) {
-    errors.push('A work selection is required.');
-  }
-
-  if (!values.contentType) {
-    errors.push('A content type selection is required.');
-  }
-
-  if (!values.tone) {
-    errors.push('A tone selection is required.');
-  }
-
-  if (!values.languageStyle) {
-    errors.push('A language style selection is required.');
-  }
-
-  return errors;
-}
-
-function showAlert(message, variant) {
-  if (!elements.alert) return;
-
-  elements.alert.textContent = message;
-  elements.alert.className = `alert alert--${variant}`;
-}
-
-function hideAlert() {
-  if (!elements.alert) return;
-
-  elements.alert.textContent = '';
-  elements.alert.className = 'alert is-hidden';
-}
-
-function humanizeContentType(contentType) {
-  const labels = {
-    poem: 'poem',
-    'lyric-essay': 'lyric essay',
-    'dramatic-monologue': 'dramatic monologue',
-    'verse-sequence': 'verse sequence',
-    'hybrid-meditation': 'hybrid meditation'
-  };
-
-  return labels[contentType] || contentType || 'poem';
-}
-
-function humanizeParagraphDensity(density) {
-  const labels = {
-    minimal: 'minimal paragraph framing',
-    balanced: 'balanced stanza and paragraph treatment',
-    expanded: 'expanded compositional treatment',
-    'long-paragraphs': 'long-paragraph development where appropriate'
-  };
-
-  return labels[density] || density || 'balanced stanza and paragraph treatment';
-}
-
-function buildOptionalInstructionLines(values) {
-  const lines = [];
-
-  if (values.philosophy) {
-    lines.push('Blend philosophical reflection into the composition so the poem carries intellectual depth and sustained contemplation.');
-  }
-
-  if (values.scripture) {
-    lines.push('Allow biblical cadence and scriptural resonance, but avoid direct quotation unless explicitly necessary.');
-  }
-
-  if (values.imagery) {
-    lines.push('Use dense imagery, sensory language, and visual precision rather than generic abstraction.');
-  }
-
-  if (values.rhetoric) {
-    lines.push('Use controlled rhetorical development, including disciplined repetition, structural echo, and measured intensification.');
-  }
-
-  return lines;
-}
-
-function updateContextHelp() {
-  const values = collectFormValues();
-
-  elements.themeHelp.textContent = `${values.theme.shortDescription} ${values.theme.promptNotes}`;
-  elements.authorshipHelp.textContent = `${values.authorship.styleLabel} — ${values.authorship.description}`;
-  elements.workHelp.textContent = `${values.work.description} ${values.work.promptNotes}`;
-
-  elements.summaryTheme.textContent = values.theme.name;
-  elements.summaryAuthorship.textContent = values.authorship.name;
-  elements.summaryWork.textContent = values.work.name;
-}
-
-function buildPrompt(values) {
-  const preset = lengthPresets[values.lengthPreset] || lengthPresets[DEFAULT_LENGTH_PRESET];
-  const optionalLines = buildOptionalInstructionLines(values);
-
-  const sections = [
-    `Write a ${humanizeContentType(values.contentType)} centered on ${values.subject}.`,
-    `Primary theme: ${values.theme.name}. ${values.theme.shortDescription}`,
-    `Base the stylistic approach on ${values.authorship.name}, drawing specifically from the tonal, structural, and conceptual guidance associated with ${values.work.name}.`,
-    `Use ${values.languageStyle} with a ${values.tone} tonal register.`,
-    `Develop the composition in approximately ${values.stanzaCount} sections or stanzas, with about ${values.lineRange} lines per section, using ${humanizeParagraphDensity(values.paragraphDensity)}.`,
-    preset.guidance,
-    `Authorship notes: ${values.authorship.description}`,
-    `Work notes: ${values.work.description}`,
-    `Work emphasis: ${values.work.promptNotes}`,
-    `Theme emphasis: ${values.theme.promptNotes}`
-  ];
-
-  if (optionalLines.length) {
-    sections.push('Additional literary priorities:');
-    optionalLines.forEach((line, index) => {
-      sections.push(`${index + 1}. ${line}`);
-    });
-  }
-
-  sections.push(
-    'Do not produce a thin or abbreviated result. Build a complete literary structure with a clear opening movement, interior development, and a purposeful closing section.'
-  );
-
-  sections.push(
-    'Avoid cliché, shallow sentiment, and generic inspirational language. Keep the diction purposeful and texturally distinct.'
-  );
-
-  if (values.notes) {
-    sections.push(`Additional instructions from the editor: ${values.notes}`);
-  }
-
-  sections.push(
-    'Output only the finished literary work unless a title is naturally appropriate; if a title is used, keep it concise and relevant.'
-  );
-
-  return sections.join('\n\n');
-}
-
-function getWordCount(text) {
-  const normalized = String(text || '').trim();
-  if (!normalized) return 0;
-
-  return normalized.split(/\s+/).length;
-}
-
-function updatePromptPreview() {
-  updateContextHelp();
-
-  const values = collectFormValues();
-  const errors = validateForm(values);
-
-  if (errors.length) {
-    showAlert(errors[0], 'danger');
-    elements.promptOutput.value = '';
-    elements.wordCountBadge.textContent = '0 words';
-    return;
-  }
-
-  hideAlert();
-
-  const prompt = buildPrompt(values);
-  elements.promptOutput.value = prompt;
-  elements.wordCountBadge.textContent = `${getWordCount(prompt)} words`;
-}
-
-async function copyPromptToClipboard() {
-  const text = elements.promptOutput.value.trim();
-
-  if (!text) {
-    showAlert('There is no prompt to copy yet.', 'danger');
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(text);
-    showAlert('Prompt copied to clipboard.', 'success');
-  } catch (error) {
-    showAlert('Clipboard copy failed in this browser session.', 'danger');
+  .hero h1 {
+    max-width: 13ch;
   }
 }
 
-function downloadPromptText() {
-  const text = elements.promptOutput.value.trim();
-
-  if (!text) {
-    showAlert('There is no prompt to download yet.', 'danger');
-    return;
+@media (max-width: 760px) {
+  .site-shell {
+    width: min(100% - 20px, 1380px);
+    padding-top: 18px;
   }
 
-  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  const safeTheme = elements.themeSelect.value || 'prompt';
-  const safeAuthorship = elements.authorshipSelect.value || 'author';
-
-  anchor.href = url;
-  anchor.download = `poemfill-${safeTheme}-${safeAuthorship}.txt`;
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  URL.revokeObjectURL(url);
-
-  showAlert('Prompt text file downloaded.', 'success');
-}
-
-function handleAuthorshipChange() {
-  const selectedAuthorshipId = elements.authorshipSelect.value;
-  populateWorks(selectedAuthorshipId);
-  updatePromptPreview();
-}
-
-function restoreDefaultFormState() {
-  populateThemes();
-  populateAuthorships();
-
-  elements.themeSelect.value = DEFAULT_THEME_ID;
-  elements.authorshipSelect.value = DEFAULT_AUTHORSHIP_ID;
-  populateWorks(DEFAULT_AUTHORSHIP_ID);
-
-  elements.lengthPresetSelect.value = DEFAULT_LENGTH_PRESET;
-  elements.philosophyToggle.checked = DEFAULT_TOGGLE_STATE.philosophy;
-  elements.scriptureToggle.checked = DEFAULT_TOGGLE_STATE.scripture;
-  elements.imageryToggle.checked = DEFAULT_TOGGLE_STATE.imagery;
-  elements.rhetoricToggle.checked = DEFAULT_TOGGLE_STATE.rhetoric;
-
-  syncLengthPreset();
-  hideAlert();
-  updatePromptPreview();
-}
-
-function bindEvents() {
-  elements.form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    updatePromptPreview();
-  });
-
-  elements.authorshipSelect.addEventListener('change', handleAuthorshipChange);
-  elements.themeSelect.addEventListener('change', updatePromptPreview);
-  elements.workSelect.addEventListener('change', updatePromptPreview);
-  elements.contentTypeSelect.addEventListener('change', updatePromptPreview);
-  elements.toneSelect.addEventListener('change', updatePromptPreview);
-  elements.languageStyleSelect.addEventListener('change', updatePromptPreview);
-  elements.subjectInput.addEventListener('input', updatePromptPreview);
-  elements.stanzaCountInput.addEventListener('input', updatePromptPreview);
-  elements.lineRangeInput.addEventListener('input', updatePromptPreview);
-  elements.paragraphDensitySelect.addEventListener('change', updatePromptPreview);
-  elements.philosophyToggle.addEventListener('change', updatePromptPreview);
-  elements.scriptureToggle.addEventListener('change', updatePromptPreview);
-  elements.imageryToggle.addEventListener('change', updatePromptPreview);
-  elements.rhetoricToggle.addEventListener('change', updatePromptPreview);
-  elements.notesInput.addEventListener('input', updatePromptPreview);
-
-  elements.lengthPresetSelect.addEventListener('change', () => {
-    syncLengthPreset();
-    updatePromptPreview();
-  });
-
-  elements.copyButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    copyPromptToClipboard();
-  });
-
-  elements.downloadButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    downloadPromptText();
-  });
-
-  elements.generateButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    updatePromptPreview();
-  });
-
-  elements.form.addEventListener('reset', () => {
-    window.setTimeout(() => {
-      restoreDefaultFormState();
-    }, 0);
-  });
-}
-
-function initializeForm() {
-  populateThemes();
-  populateAuthorships();
-
-  elements.themeSelect.value = DEFAULT_THEME_ID;
-  elements.authorshipSelect.value = DEFAULT_AUTHORSHIP_ID;
-  populateWorks(DEFAULT_AUTHORSHIP_ID);
-
-  if (!elements.lengthPresetSelect.value) {
-    elements.lengthPresetSelect.value = DEFAULT_LENGTH_PRESET;
+  .panel,
+  .hero-card,
+  .info-card {
+    padding: 18px;
   }
 
-  syncLengthPreset();
-  updatePromptPreview();
-}
+  .field-grid,
+  .checkbox-grid,
+  .preview-meta {
+    grid-template-columns: 1fr;
+  }
 
-function initializeApp() {
-  initializeForm();
-  bindEvents();
-}
+  .field--span-2 {
+    grid-column: span 1;
+  }
 
-document.addEventListener('DOMContentLoaded', initializeApp);
+  .panel__header,
+  .code-card__header,
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .button,
+  .palette-switcher {
+    width: 100%;
+  }
+
+  .prompt-output {
+    min-height: 420px;
+  }
+
+  .hero h1,
+  .panel__header h2,
+  .info-card h2,
+  .code-card__header h2,
+  .hero-card h2 {
+    max-width: none;
+  }
+}
