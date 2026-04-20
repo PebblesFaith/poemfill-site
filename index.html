@@ -1,18 +1,18 @@
-<!-- index.html -->
+<!-- File: index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="palette-b">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PoemFill.dev — Prompt Builder</title>
     <meta
       name="description"
-      content="PoemFill.dev prompt builder for themes, authorships, content types, and structured long-form poetic generation."
+      content="PoemFill.dev prompt builder for themes, authorships, content types, and structured long-form literary generation."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/css/styles.css" />
@@ -20,21 +20,62 @@
   <body>
     <div class="site-shell">
       <header class="hero">
-        <div>
+        <div class="hero-copy-block">
           <p class="eyebrow">PoemFill.dev</p>
-          <h1>Structured poem and literary prompt builder</h1>
+          <h1>Structured literary prompt building with an editorial interface.</h1>
           <p class="hero-copy">
-            Create consistent literary prompts with aligned controls for theme, authorship,
-            source work, content type, paragraph length, tone, and optional philosophy emphasis.
+            Build consistent literary prompts with aligned controls for theme, authorship, source
+            work, content type, tone, composition length, and optional enrichment layers.
           </p>
+
+          <div class="hero-chip-row" aria-label="Product highlights">
+            <span class="hero-chip">Public-domain guided prompting</span>
+            <span class="hero-chip">Structured literary controls</span>
+            <span class="hero-chip">Live prompt preview</span>
+          </div>
+
+          <div class="hero-actions">
+            <div class="palette-switcher">
+              <label for="paletteSelect">Palette</label>
+              <select id="paletteSelect" name="palette">
+                <option value="palette-a">Palette A — Developer Blue</option>
+                <option value="palette-b" selected>Palette B — Editorial Warm Neutral</option>
+                <option value="palette-c">Palette C — Soft Contrast</option>
+              </select>
+            </div>
+
+            <p class="hero-note">
+              Warm editorial default with switchable alternate themes for product and developer presentation.
+            </p>
+          </div>
         </div>
+
         <div class="hero-card">
-          <p class="hero-card__label">Phase 1 Frontend</p>
-          <ul class="hero-card__list">
-            <li>Separated HTML, CSS, and JS</li>
-            <li>Stable layout and prompt logic</li>
-            <li>Ready for future admin portal wiring</li>
-          </ul>
+          <p class="hero-card__eyebrow">Builder status</p>
+          <h2>Prompt-first workflow with reliable live generation.</h2>
+          <p class="hero-card__copy">
+            Theme, authorship, work reference, composition scale, and instruction notes remain intact.
+            The interface now supports palette switching without disturbing builder logic.
+          </p>
+
+          <div class="hero-card__meta">
+            <div class="hero-card__meta-item">
+              <span>Mode</span>
+              <strong>Frontend MVP</strong>
+            </div>
+            <div class="hero-card__meta-item">
+              <span>Prompt Engine</span>
+              <strong>Live Preview</strong>
+            </div>
+            <div class="hero-card__meta-item">
+              <span>Visual System</span>
+              <strong>Editorial + Developer</strong>
+            </div>
+          </div>
+
+          <p class="hero-card__footer">
+            Designed for literary prompt drafting, mockup workflows, and future portal expansion.
+          </p>
         </div>
       </header>
 
@@ -42,12 +83,13 @@
         <section class="panel panel--form" aria-labelledby="builder-title">
           <div class="panel__header">
             <div>
+              <p class="eyebrow eyebrow--muted">Builder</p>
               <h2 id="builder-title">Prompt Controls</h2>
               <p class="panel__subcopy">
                 Select the literary structure you want. The preview updates live as you change fields.
               </p>
             </div>
-            <span class="status-pill">Static MVP</span>
+            <span class="status-pill">Structured MVP</span>
           </div>
 
           <form id="prompt-form" class="builder-form" novalidate>
@@ -246,6 +288,7 @@
         <aside class="panel panel--preview" aria-labelledby="preview-title">
           <div class="panel__header">
             <div>
+              <p class="eyebrow eyebrow--muted">Preview</p>
               <h2 id="preview-title">Live Prompt Preview</h2>
               <p class="panel__subcopy">This output is ready to paste into your generation workflow.</p>
             </div>
@@ -271,6 +314,42 @@
           <textarea id="promptOutput" class="prompt-output" rows="22" readonly></textarea>
         </aside>
       </main>
+
+      <section class="info-grid" aria-labelledby="builder-notes-title">
+        <article class="info-card">
+          <p class="eyebrow eyebrow--muted">Builder notes</p>
+          <h2 id="builder-notes-title">Editorial surface. Structured prompt assembly.</h2>
+          <p>
+            PoemFill.dev is organized for repeatable literary prompting. Theme, authorship, work reference,
+            tone, language style, and output scale are assembled into a single prompt with a stable preview surface.
+          </p>
+          <p>
+            If Subject / Focus is left blank, the JavaScript layer can still derive a fallback subject from the selected
+            literary controls so the preview remains usable.
+          </p>
+        </article>
+
+        <article class="info-card info-card--code" aria-labelledby="schema-title">
+          <div class="code-card__header">
+            <h2 id="schema-title">Builder schema example</h2>
+            <span class="code-badge">UI → Prompt</span>
+          </div>
+
+          <pre class="code-block"><code>{
+  "theme": "redemption",
+  "authorship": "shakespeare",
+  "work": "hamlet",
+  "contentType": "poem",
+  "tone": "reflective",
+  "languageStyle": "elevated-modern",
+  "lengthPreset": "developer"
+}</code></pre>
+
+          <p class="code-note">
+            This is a frontend configuration example for the prompt builder layout, not a public API contract.
+          </p>
+        </article>
+      </section>
     </div>
 
     <script src="assets/js/app.js"></script>
