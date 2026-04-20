@@ -1,211 +1,708 @@
 from pathlib import Path
 import zipfile
+from textwrap import dedent
 
-html = """<!-- File: index.html -->
+html = dedent("""\
+<!-- File: index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PoemFill.dev — Public-Domain Text Generator</title>
-  <meta name="description" content="PoemFill.dev generates public-domain poetry, philosophy, and literary text for UI mockups, editorial previews, and developer testing." />
-  <meta name="theme-color" content="#F7F5F0" />
-  <link rel="canonical" href="https://poemfill.dev/" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>PoemFill.dev — Structured Public-Domain Text Generator</title>
+  <meta
+    name="description"
+    content="PoemFill.dev generates structured public-domain poetry, philosophy, and literary passages for UI mockups, editorial previews, and testing environments."
+  />
+  <meta
+    name="theme-color"
+    content="#F7F5F0"
+  />
+  <link
+    rel="canonical"
+    href="https://poemfill.dev/"
+  />
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F7F5F0'/%3E%3Cpath d='M18 46V18h15.5c7.8 0 12.5 4.2 12.5 10.5 0 6.6-5.1 10.8-13.1 10.8H25V46H18zm7-12.3h8c4.2 0 6.4-1.8 6.4-5.1 0-3.1-2.2-4.9-6.3-4.9H25v10z' fill='%238B938C'/%3E%3C/svg%3E"
+  />
+
+  <meta
+    property="og:title"
+    content="PoemFill.dev — Structured Public-Domain Text Generator"
+  />
+  <meta
+    property="og:description"
+    content="Generate structured public-domain poetry, philosophy, and literary passages for mockups, editorial layouts, and developer testing."
+  />
+  <meta
+    property="og:type"
+    content="website"
+  />
+  <meta
+    property="og:url"
+    content="https://poemfill.dev/"
+  />
+
   <style>
     :root {
-      --paper: #F7F5F0;
-      --ink: #2B211A;
-      --ink-soft: #5C5148;
-      --sage: #8B938C;
-      --sage-deep: #697169;
-      --parchment: #DCD7CC;
-      --surface: #FFFFFF;
-      --border: #E7E1D6;
-      --border-strong: #CFC7B8;
-      --code-bg: #F1ECE4;
+      --color-paper: #F7F5F0;
+      --color-surface: #FFFFFF;
+      --color-ink: #2B211A;
+      --color-ink-soft: #5A4F47;
+      --color-sage: #8B938C;
+      --color-sage-deep: #6F776F;
+      --color-parchment: #DCD7CC;
+      --color-border: #E7E1D6;
+      --color-border-strong: #CFC7B8;
+      --color-code-bg: #F1ECE4;
+      --color-success: #5F7A63;
       --shadow-soft: 0 10px 28px rgba(43, 33, 26, 0.07);
       --shadow-subtle: 0 4px 16px rgba(43, 33, 26, 0.05);
       --radius-xl: 24px;
       --radius-lg: 18px;
-      --radius-md: 14px;
+      --radius-md: 12px;
+      --radius-sm: 10px;
       --max-width: 1180px;
       --transition-fast: 160ms ease;
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       background:
         radial-gradient(circle at top left, rgba(139, 147, 140, 0.10), transparent 26%),
         radial-gradient(circle at bottom right, rgba(220, 215, 204, 0.30), transparent 24%),
-        var(--paper);
-      color: var(--ink);
+        var(--color-paper);
+      color: var(--color-ink);
       font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
-    a { color: inherit; text-decoration: none; }
-    button, input, select { font: inherit; }
-    .container { width: min(var(--max-width), calc(100% - 32px)); margin: 0 auto; }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .container {
+      width: min(var(--max-width), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
     .site-header {
-      position: sticky; top: 0; z-index: 30; backdrop-filter: blur(10px);
-      background: rgba(247, 245, 240, 0.88); border-bottom: 1px solid rgba(207, 199, 184, 0.65);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(10px);
+      background: rgba(247, 245, 240, 0.88);
+      border-bottom: 1px solid rgba(207, 199, 184, 0.65);
     }
+
     .header-inner {
-      min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
     }
-    .brand { display: inline-flex; align-items: center; gap: 14px; min-width: 0; }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
     .brand-mark {
-      width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
-      background: linear-gradient(145deg, var(--surface), #EFE9DF);
-      border: 1px solid var(--border-strong); box-shadow: var(--shadow-subtle);
-      color: var(--sage-deep); flex-shrink: 0; overflow: hidden;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, var(--color-surface), #EFE9DF);
+      border: 1px solid var(--color-border-strong);
+      box-shadow: var(--shadow-subtle);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--color-sage-deep);
+      flex-shrink: 0;
     }
-    .brand-mark svg { width: 28px; height: 28px; display: block; }
-    .brand-name { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
-    .brand-subtitle { font-size: 0.78rem; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .nav { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-    .nav a { color: var(--ink-soft); font-size: 0.95rem; font-weight: 500; transition: color var(--transition-fast); }
-    .nav a:hover { color: var(--sage-deep); }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-ink);
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--color-ink-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: var(--color-ink-soft);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color var(--transition-fast);
+    }
+
+    .nav a:hover {
+      color: var(--color-sage-deep);
+    }
+
     .hero {
-      padding: 52px 0 24px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
-      gap: 26px; align-items: stretch;
+      padding: 52px 0 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+      gap: 26px;
+      align-items: stretch;
     }
+
     .card {
-      background: rgba(255, 255, 255, 0.92); border: 1px solid var(--border);
-      border-radius: var(--radius-xl); box-shadow: var(--shadow-soft);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
     }
-    .hero-copy { padding: 34px; }
+
+    .hero-copy {
+      padding: 34px;
+    }
+
     .eyebrow {
-      display: inline-flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: 999px;
-      background: rgba(220, 215, 204, 0.65); border: 1px solid var(--border-strong);
-      color: var(--sage-deep); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(220, 215, 204, 0.65);
+      border: 1px solid var(--color-border-strong);
+      color: var(--color-sage-deep);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
+
     .hero-title {
-      margin: 18px 0 0; font-family: "Cormorant Garamond", serif;
-      font-size: clamp(2.65rem, 6vw, 4.55rem); line-height: 0.96; letter-spacing: -0.03em; font-weight: 600;
+      margin: 18px 0 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.7rem, 6vw, 4.6rem);
+      line-height: 0.96;
+      letter-spacing: -0.03em;
+      font-weight: 600;
     }
-    .hero-title em { color: var(--sage-deep); font-style: italic; font-weight: 700; }
-    .hero-description { margin: 20px 0 0; max-width: 62ch; color: var(--ink-soft); font-size: 1.02rem; line-height: 1.78; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+
+    .hero-title em {
+      color: var(--color-sage-deep);
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .hero-description {
+      margin: 20px 0 0;
+      max-width: 62ch;
+      color: var(--color-ink-soft);
+      font-size: 1.02rem;
+      line-height: 1.78;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
     .button {
-      display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 0;
-      border-radius: 14px; padding: 13px 18px; font-weight: 600; cursor: pointer;
-      transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition:
+        transform var(--transition-fast),
+        background var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast),
+        box-shadow var(--transition-fast);
     }
-    .button:hover { transform: translateY(-1px); }
-    .button-primary { background: var(--sage); color: #FFF; box-shadow: 0 10px 20px rgba(111,119,111,0.18); }
-    .button-primary:hover { background: var(--sage-deep); }
-    .button-secondary { background: transparent; color: var(--ink); border: 1px solid var(--border-strong); }
-    .button-secondary:hover { background: rgba(220, 215, 204, 0.34); }
-    .hero-preview { padding: 22px; display: grid; gap: 16px; }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      background: var(--color-sage);
+      color: #FFFFFF;
+      box-shadow: 0 10px 20px rgba(111, 119, 111, 0.18);
+    }
+
+    .button-primary:hover {
+      background: var(--color-sage-deep);
+    }
+
+    .button-secondary {
+      background: transparent;
+      color: var(--color-ink);
+      border: 1px solid var(--color-border-strong);
+    }
+
+    .button-secondary:hover {
+      background: rgba(220, 215, 204, 0.34);
+    }
+
+    .hero-preview {
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
     .preview-panel {
-      border: 1px solid var(--border); border-radius: 18px;
-      background: linear-gradient(180deg, #FFFEFC, #F7F2EA); padding: 18px;
+      border: 1px solid var(--color-border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #FFFEFC, #F7F2EA);
+      padding: 18px;
     }
-    .preview-label, .sidebar-label {
-      margin: 0 0 10px; font-size: 0.74rem; text-transform: uppercase;
-      letter-spacing: 0.12em; color: var(--sage-deep); font-weight: 800;
+
+    .preview-label {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-ink-soft);
+      margin-bottom: 10px;
+      font-weight: 700;
     }
+
     .preview-poem {
-      font-family: "Cormorant Garamond", serif; font-size: 1.44rem;
-      line-height: 1.42; color: var(--ink); white-space: pre-wrap;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.5rem;
+      line-height: 1.38;
+      color: var(--color-ink);
+      white-space: pre-wrap;
     }
-    .preview-note { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.7; }
-    .main-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 22px; padding: 10px 0 28px; }
-    .generator-card { padding: 24px; }
+
+    .preview-note {
+      color: var(--color-ink-soft);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 22px;
+      padding: 10px 0 28px;
+    }
+
+    .generator-card {
+      padding: 24px;
+    }
+
     .section-title {
-      margin: 0; font-family: "Cormorant Garamond", serif; font-size: 2rem;
-      font-weight: 600; letter-spacing: -0.02em;
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
     }
-    .section-description { margin: 8px 0 0; color: var(--ink-soft); line-height: 1.72; max-width: 70ch; }
-    .controls-grid { margin-top: 22px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    .field { display: grid; gap: 8px; }
-    .field.full { grid-column: 1 / -1; }
-    .field label { font-size: 0.84rem; font-weight: 700; color: var(--ink-soft); letter-spacing: 0.01em; }
-    .helper-text { margin: 2px 0 0; color: var(--ink-soft); font-size: 0.8rem; line-height: 1.5; }
-    .input, .select {
-      width: 100%; border: 1px solid var(--border-strong); border-radius: 12px;
-      background: var(--surface); color: var(--ink); padding: 12px 14px;
-      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+
+    .section-description {
+      margin: 8px 0 0;
+      color: var(--color-ink-soft);
+      line-height: 1.72;
+      max-width: 68ch;
     }
-    .input:focus, .select:focus { outline: none; border-color: var(--sage); box-shadow: 0 0 0 4px rgba(139,147,140,0.14); }
+
+    .controls-grid {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--color-ink-soft);
+      letter-spacing: 0.01em;
+    }
+
+    .field-helper {
+      margin-top: -2px;
+      color: var(--color-ink-soft);
+      font-size: 0.81rem;
+      line-height: 1.5;
+    }
+
+    .input,
+    .select {
+      width: 100%;
+      border: 1px solid var(--color-border-strong);
+      border-radius: 12px;
+      background: var(--color-surface);
+      color: var(--color-ink);
+      padding: 12px 14px;
+      transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
+    }
+
+    .input:focus,
+    .select:focus {
+      outline: none;
+      border-color: var(--color-sage);
+      box-shadow: 0 0 0 4px rgba(139, 147, 140, 0.14);
+    }
+
     .checkbox-panel {
-      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
-      padding: 14px; border: 1px solid var(--border); border-radius: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
       background: rgba(220, 215, 204, 0.22);
     }
-    .checkbox-item { display: inline-flex; align-items: center; gap: 10px; color: var(--ink-soft); font-size: 0.94rem; }
-    .checkbox-item input { accent-color: var(--sage-deep); }
-    .action-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+    .checkbox-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--color-ink-soft);
+      font-size: 0.94rem;
+    }
+
+    .checkbox-item input {
+      accent-color: var(--color-sage-deep);
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
     .output-shell {
-      margin-top: 22px; border: 1px solid var(--border); border-radius: 20px;
-      overflow: hidden; background: #FFFDF9;
+      margin-top: 22px;
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      overflow: hidden;
+      background: #FFFDF9;
     }
+
     .output-toolbar {
-      display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
-      padding: 14px 16px; border-bottom: 1px solid var(--border); background: rgba(220, 215, 204, 0.28);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--color-border);
+      background: rgba(220, 215, 204, 0.28);
     }
-    .toolbar-meta { color: var(--ink-soft); font-size: 0.86rem; }
+
+    .toolbar-meta {
+      color: var(--color-ink-soft);
+      font-size: 0.86rem;
+    }
+
     .status-pill {
-      display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
-      background: rgba(139, 147, 140, 0.14); color: var(--sage-deep); font-size: 0.82rem; font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(139, 147, 140, 0.14);
+      color: var(--color-sage-deep);
+      font-size: 0.82rem;
+      font-weight: 700;
     }
-    .output-content { padding: 24px 22px 20px; }
+
+    .output-content {
+      padding: 24px 22px 20px;
+    }
+
     .poem-title {
-      margin: 0 0 10px; font-family: "Cormorant Garamond", serif;
-      font-size: 2rem; line-height: 1.05; font-weight: 600; letter-spacing: -0.02em;
+      margin: 0 0 10px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2rem;
+      line-height: 1.05;
+      font-weight: 600;
+      letter-spacing: -0.02em;
     }
-    .poem-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+    .poem-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
     .meta-chip {
-      display: inline-flex; align-items: center; padding: 6px 11px; border-radius: 999px;
-      border: 1px solid var(--border-strong); background: rgba(220, 215, 204, 0.30);
-      color: var(--ink-soft); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.01em;
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--color-border-strong);
+      background: rgba(220, 215, 204, 0.30);
+      color: var(--color-ink-soft);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
     }
+
     .poem-text {
-      margin: 0; min-height: 260px; white-space: pre-wrap; font-family: "Cormorant Garamond", serif;
-      font-size: 1.5rem; line-height: 1.64; color: var(--ink);
+      margin: 0;
+      min-height: 190px;
+      white-space: pre-wrap;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.58rem;
+      line-height: 1.62;
+      color: var(--color-ink);
     }
-    .output-footer { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); color: var(--ink-soft); font-size: 0.88rem; line-height: 1.65; }
-    .sidebar { display: grid; gap: 18px; align-content: start; }
-    .sidebar-card { padding: 18px; }
-    .sidebar-title { margin: 0; font-family: "Cormorant Garamond", serif; font-size: 1.5rem; line-height: 1.08; font-weight: 600; }
-    .sidebar-copy { margin: 10px 0 0; color: var(--ink-soft); font-size: 0.94rem; line-height: 1.72; }
-    .sponsor-box { border: 1px dashed var(--border-strong); border-radius: 16px; background: rgba(220,215,204,0.22); padding: 16px; }
-    .mini-list { margin: 12px 0 0; padding-left: 18px; color: var(--ink-soft); line-height: 1.75; font-size: 0.95rem; }
+
+    .output-footer {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--color-border);
+      color: var(--color-ink-soft);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .sidebar-card {
+      padding: 18px;
+    }
+
+    .sidebar-label {
+      margin: 0 0 10px;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-sage-deep);
+      font-weight: 800;
+    }
+
+    .sidebar-title {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.5rem;
+      line-height: 1.08;
+      font-weight: 600;
+    }
+
+    .sidebar-copy {
+      margin: 10px 0 0;
+      color: var(--color-ink-soft);
+      font-size: 0.94rem;
+      line-height: 1.72;
+    }
+
+    .sponsor-box {
+      border: 1px dashed var(--color-border-strong);
+      border-radius: 16px;
+      background: rgba(220, 215, 204, 0.22);
+      padding: 16px;
+    }
+
+    .mini-list {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--color-ink-soft);
+      line-height: 1.75;
+      font-size: 0.95rem;
+    }
+
     .code-block {
-      margin-top: 12px; padding: 14px; border-radius: 14px; background: var(--code-bg);
-      border: 1px solid var(--border); color: var(--ink); font-family: "JetBrains Mono", monospace;
-      font-size: 0.83rem; line-height: 1.65; overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--color-code-bg);
+      border: 1px solid var(--color-border);
+      color: var(--color-ink);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.83rem;
+      line-height: 1.65;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
-    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; padding-bottom: 56px; }
-    .feature-card { padding: 22px; }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      padding-bottom: 56px;
+    }
+
+    .feature-card {
+      padding: 22px;
+    }
+
     .feature-card h3 {
-      margin: 0; font-family: "Cormorant Garamond", serif; font-size: 1.65rem; line-height: 1.06; font-weight: 600;
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.65rem;
+      line-height: 1.06;
+      font-weight: 600;
     }
-    .feature-card p { margin: 10px 0 0; color: var(--ink-soft); line-height: 1.72; }
-    .site-footer { border-top: 1px solid rgba(207, 199, 184, 0.8); padding: 28px 0 42px; }
-    .footer-grid { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.72; }
-    .footer-strong { color: var(--ink); font-weight: 700; }
-    .footer-links { display: flex; gap: 14px; flex-wrap: wrap; }
-    .footer-links a:hover { color: var(--sage-deep); }
+
+    .feature-card p {
+      margin: 10px 0 0;
+      color: var(--color-ink-soft);
+      line-height: 1.72;
+    }
+
+    .site-footer {
+      border-top: 1px solid rgba(207, 199, 184, 0.8);
+      padding: 28px 0 42px;
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: var(--color-ink-soft);
+      font-size: 0.9rem;
+      line-height: 1.72;
+    }
+
+    .footer-strong {
+      color: var(--color-ink);
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover {
+      color: var(--color-sage-deep);
+    }
+
     @media (max-width: 1024px) {
-      .hero, .main-grid, .feature-grid { grid-template-columns: 1fr; }
-      .hero-preview { order: -1; }
-      .sidebar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .hero,
+      .main-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-preview {
+        order: -1;
+      }
+
+      .sidebar {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
+
     @media (max-width: 760px) {
-      .header-inner { min-height: auto; padding: 14px 0; align-items: flex-start; flex-direction: column; }
-      .nav { gap: 14px; }
-      .hero { padding-top: 30px; }
-      .hero-copy, .generator-card, .sidebar-card, .feature-card { padding: 20px; }
-      .controls-grid, .checkbox-panel, .sidebar, .feature-grid { grid-template-columns: 1fr; }
-      .hero-title { font-size: clamp(2.3rem, 11vw, 3.4rem); }
-      .poem-text { font-size: 1.34rem; }
+      .header-inner {
+        min-height: auto;
+        padding: 14px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav {
+        gap: 14px;
+      }
+
+      .hero {
+        padding-top: 30px;
+      }
+
+      .hero-copy,
+      .generator-card,
+      .sidebar-card,
+      .feature-card {
+        padding: 20px;
+      }
+
+      .controls-grid,
+      .checkbox-panel,
+      .sidebar,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: clamp(2.3rem, 11vw, 3.4rem);
+      }
+
+      .poem-text {
+        font-size: 1.38rem;
+      }
     }
   </style>
 </head>
@@ -213,18 +710,13 @@ html = """<!-- File: index.html -->
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="/">
-        <div class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M14 45H46C50.4183 45 54 41.4183 54 37C54 32.5817 50.4183 29 46 29H21V17H41C46.5228 17 51 21.4772 51 27V31" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M22 20C26.5 22 31.5 22 36 20" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-            <path d="M22 26C26.5 28 31.5 28 36 26" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div>
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
           <div class="brand-name">PoemFill.dev</div>
-          <div class="brand-subtitle">Public-domain text for mockups, editorial previews, and developer testing</div>
+          <div class="brand-subtitle">Structured public-domain text for mockups, editorial previews, and demos</div>
         </div>
       </a>
+
       <nav class="nav" aria-label="Primary">
         <a href="#generator">Generator</a>
         <a href="#api">API</a>
@@ -237,13 +729,17 @@ html = """<!-- File: index.html -->
   <main class="container">
     <section class="hero" id="about">
       <div class="card hero-copy">
-        <div class="eyebrow">A better lorem ipsum for editorial interfaces, demos, and structured developer previews</div>
-        <h1 class="hero-title">Generate beautiful <em>public-domain</em> text</h1>
+        <div class="eyebrow">A better lorem ipsum for editorial interfaces, demos, and developer previews</div>
+        <h1 class="hero-title">
+          Generate structured <em>public-domain</em> text
+        </h1>
         <p class="hero-description">
-          PoemFill.dev now supports poetry, philosophy, and literary passages so developers can test
-          short verse blocks, formal prose paragraphs, and longer editorial layouts from one utility.
-          The controls are structure-aware, and output size now aligns with the selected content mode.
+          PoemFill.dev replaces generic placeholder copy with readable public-domain poetry,
+          philosophy, and literary passages. Use it for product mockups, landing pages,
+          editorial layouts, newsletters, and developer test content that benefits from
+          stronger rhythm, texture, and readability.
         </p>
+
         <div class="hero-actions">
           <a class="button button-primary" href="#generator">Generate Text</a>
           <a class="button button-secondary" href="#api">View API Direction</a>
@@ -253,16 +749,17 @@ html = """<!-- File: index.html -->
       <div class="card hero-preview">
         <div class="preview-panel">
           <div class="preview-label">Sample output</div>
-          <div class="preview-poem" id="heroPreview">"Hope" is the thing with feathers —
+          <div class="preview-poem" id="heroPreview">“Hope” is the thing with feathers —
 That perches in the soul —
 And sings the tune without the words —
 And never stops — at all —</div>
         </div>
+
         <div class="preview-panel">
-          <div class="preview-label">UI upgrade summary</div>
+          <div class="preview-label">Why PoemFill.dev</div>
           <div class="preview-note">
-            Editorial Warm Neutral palette, refined typography, longer paragraph output,
-            philosophy highlights, clearer structure controls, and more literal count behavior.
+            Better rhythm, better texture, and better readability than generic filler.
+            Structured output supports plain text, HTML, Markdown, and JSON.
           </div>
         </div>
       </div>
@@ -270,34 +767,32 @@ And never stops — at all —</div>
 
     <section class="main-grid" id="generator">
       <div class="card generator-card">
-        <h2 class="section-title">Public-domain text generator</h2>
+        <h2 class="section-title">Structured text generator</h2>
         <p class="section-description">
-          Choose a source class, content structure, and output amount. Paragraph mode now returns
-          true paragraph counts, line mode returns exact lines, and stanza mode returns grouped verse blocks.
-          Philosophy and literary entries support longer paragraph output for more realistic interface testing.
+          Generate sample output by source class, content structure, theme, author, and format.
+          This release uses a built-in demo corpus with poetry, philosophy, and literary passages,
+          organized for later API-backed expansion.
         </p>
 
         <div class="controls-grid">
           <div class="field">
             <label for="sourceClass">Source Class</label>
             <select class="select" id="sourceClass">
-              <option value="mixed">Mixed Public Domain</option>
+              <option value="any">Mixed Public Domain</option>
               <option value="poem">Poem</option>
               <option value="philosophy">Philosophy</option>
-              <option value="literary">Literary Passage</option>
+              <option value="literary-passage">Literary Passage</option>
             </select>
-            <div class="helper-text" id="sourceClassHelp">Blends poetry, philosophy, and literary passages for broader layout testing.</div>
           </div>
 
           <div class="field">
-            <label for="contentStructure">Content Structure</label>
-            <select class="select" id="contentStructure">
+            <label for="contentType">Content Structure</label>
+            <select class="select" id="contentType">
               <option value="paragraph">Paragraph</option>
               <option value="lines">Lines</option>
               <option value="stanza">Stanza</option>
               <option value="excerpt">Short Excerpt</option>
             </select>
-            <div class="helper-text" id="structureHelp">Generates full paragraphs from longer public-domain text.</div>
           </div>
 
           <div class="field">
@@ -305,11 +800,12 @@ And never stops — at all —</div>
             <select class="select" id="theme">
               <option value="any">Any Theme</option>
               <option value="hope">Hope</option>
-              <option value="reflection">Reflection</option>
               <option value="nature">Nature</option>
+              <option value="reflection">Reflection</option>
+              <option value="evening">Evening</option>
               <option value="sea">Sea</option>
-              <option value="duty">Duty</option>
-              <option value="night">Night</option>
+              <option value="reason">Reason</option>
+              <option value="self">Self</option>
             </select>
           </div>
 
@@ -322,7 +818,6 @@ And never stops — at all —</div>
               <option value="Marcus Aurelius">Marcus Aurelius</option>
               <option value="Ralph Waldo Emerson">Ralph Waldo Emerson</option>
               <option value="Walt Whitman">Walt Whitman</option>
-              <option value="Public Domain Collection">Public Domain Collection</option>
             </select>
           </div>
 
@@ -337,18 +832,40 @@ And never stops — at all —</div>
           </div>
 
           <div class="field">
-            <label for="outputAmount" id="outputAmountLabel">Paragraph Count</label>
-            <input class="input" id="outputAmount" type="number" min="1" max="24" value="3" />
-            <div class="helper-text" id="amountHelp">Returns 3 full paragraphs when paragraph mode is selected.</div>
+            <label for="amount" id="amountLabel">Paragraph Count</label>
+            <input
+              class="input"
+              id="amount"
+              type="number"
+              min="1"
+              max="12"
+              value="4"
+            />
+            <div class="field-helper" id="amountHelper">Generate 4 paragraphs of structured public-domain text.</div>
           </div>
 
           <div class="field full">
             <label>Formatting Options</label>
             <div class="checkbox-panel">
-              <label class="checkbox-item"><input id="showTitle" type="checkbox" checked /> Show title</label>
-              <label class="checkbox-item"><input id="showAuthor" type="checkbox" checked /> Show author</label>
-              <label class="checkbox-item"><input id="preserveBreaks" type="checkbox" checked /> Preserve line breaks</label>
-              <label class="checkbox-item"><input id="compactSpacing" type="checkbox" /> Compact spacing</label>
+              <label class="checkbox-item">
+                <input id="showTitle" type="checkbox" checked />
+                Show title
+              </label>
+
+              <label class="checkbox-item">
+                <input id="showAuthor" type="checkbox" checked />
+                Show author
+              </label>
+
+              <label class="checkbox-item">
+                <input id="preserveBreaks" type="checkbox" checked />
+                Preserve line breaks
+              </label>
+
+              <label class="checkbox-item">
+                <input id="compactSpacing" type="checkbox" />
+                Compact spacing
+              </label>
             </div>
           </div>
         </div>
@@ -362,22 +879,25 @@ And never stops — at all —</div>
 
         <div class="output-shell" aria-live="polite">
           <div class="output-toolbar">
-            <div class="toolbar-meta" id="metaLine">Source: Demo corpus · Structure: Paragraph · Format: Plain Text</div>
+            <div class="toolbar-meta" id="metaLine">Source: Demo corpus · Format: Plain Text</div>
             <div class="status-pill" id="statusLine">Ready</div>
           </div>
 
           <div class="output-content">
             <h3 class="poem-title" id="outputTitle">Hope is the Thing with Feathers</h3>
+
             <div class="poem-meta" id="outputMeta">
               <span class="meta-chip" id="metaAuthor">Emily Dickinson</span>
-              <span class="meta-chip" id="metaType">Poem</span>
               <span class="meta-chip" id="metaTheme">Hope</span>
+              <span class="meta-chip" id="metaSourceClass">Poem</span>
               <span class="meta-chip" id="metaRights">Public-domain demo corpus</span>
             </div>
+
             <pre class="poem-text" id="outputText"></pre>
+
             <div class="output-footer">
-              This prototype now includes poetry, philosophy, and literary passages to support richer developer testing.
-              Continue replacing demo entries with source-linked, jurisdiction-reviewed public-domain records before scaling the library.
+              Curated from public-domain source text and demo-compatible structured records pending broader source expansion.
+              Future API delivery can return the same assembled output with source metadata and machine-readable descriptors.
             </div>
           </div>
         </div>
@@ -389,56 +909,59 @@ And never stops — at all —</div>
           <div class="sponsor-box">
             <h3 class="sidebar-title">Sponsor this placement</h3>
             <p class="sidebar-copy">
-              Reach designers and developers using PoemFill.dev for layout previews, mockups, and structured content testing.
+              Reach designers and developers using PoemFill.dev for previews, mockups, and test content.
             </p>
           </div>
         </div>
 
         <div class="card sidebar-card">
           <div class="sidebar-label">Use Cases</div>
-          <h3 class="sidebar-title">Built for real interface testing</h3>
+          <h3 class="sidebar-title">Built for practical placeholder use</h3>
           <ul class="mini-list">
-            <li>Hero copy and landing page previews</li>
-            <li>Editorial article and blog layouts</li>
-            <li>Email, card, and modal content testing</li>
-            <li>API, JSON, and data output demonstrations</li>
+            <li>Landing page content previews</li>
+            <li>Editorial and publishing mockups</li>
+            <li>Newsletter and product email layouts</li>
+            <li>App cards, modals, and demo dashboards</li>
           </ul>
         </div>
 
         <div class="card sidebar-card" id="api">
           <div class="sidebar-label">API Direction</div>
-          <h3 class="sidebar-title">Structured output for product teams</h3>
+          <h3 class="sidebar-title">Developer-ready output path</h3>
           <p class="sidebar-copy">
-            A future API can expose source class, structure, count, theme, and export format while usage billing remains separate from the public website.
+            The public site is only the first layer. A future API can support usage-based access,
+            programmatic generation, and export-ready output across multiple public-domain source classes.
           </p>
-          <div class="code-block">GET /api/v1/generate?sourceClass=philosophy&amp;structure=paragraph&amp;count=4&amp;format=json</div>
+          <div class="code-block">GET /api/v1/generate?sourceClass=poem&type=lines&theme=hope&count=4&format=json</div>
         </div>
       </aside>
     </section>
 
     <section class="feature-grid" id="sources">
       <div class="card feature-card">
-        <div class="sidebar-label">Longer paragraphs</div>
-        <h3>Paragraph mode now behaves like a real utility</h3>
+        <div class="sidebar-label">Readable filler</div>
+        <h3>Better visual rhythm than generic lorem ipsum</h3>
         <p>
-          Output amount now matches the selected structure. Paragraph mode returns actual paragraph counts,
-          not just a lightly repeated short verse block.
+          PoemFill.dev produces text with stronger cadence, shape, and readability for
+          interfaces that need more than abstract placeholder copy.
         </p>
       </div>
+
       <div class="card feature-card">
-        <div class="sidebar-label">Philosophy highlights</div>
-        <h3>Formal prose joins the poetry corpus</h3>
+        <div class="sidebar-label">Flexible output</div>
+        <h3>Structured for design, content, and engineering</h3>
         <p>
-          Philosophy entries provide denser public-domain style paragraphs so product teams can test serious, reflective,
-          article-like layouts beyond short lyric output.
+          Return plain text, HTML, Markdown, or JSON depending on whether the goal is
+          browser rendering, testing, prototyping, or data-driven output.
         </p>
       </div>
+
       <div class="card feature-card">
-        <div class="sidebar-label">Clearer controls</div>
-        <h3>Source class and structure are now explicit</h3>
+        <div class="sidebar-label">Source policy</div>
+        <h3>Built around verified public-domain direction</h3>
         <p>
-          The revised UI makes it easier to understand whether the generator is returning poetry, philosophy, or literary passages,
-          and how count values will be applied.
+          Organize the corpus for verified public-domain poetry, philosophy, and literary
+          passages before scaling the library or introducing API-backed retrieval.
         </p>
       </div>
     </section>
@@ -448,8 +971,9 @@ And never stops — at all —</div>
     <div class="container footer-grid">
       <div>
         <span class="footer-strong">PoemFill.dev</span><br />
-        Public-domain poetry, philosophy, and literary text for mockups, design previews, editorial layouts, and developer testing.
+        Structured public-domain text for mockups, design previews, editorial layouts, and developer testing.
       </div>
+
       <div class="footer-links">
         <a href="#generator">Generator</a>
         <a href="#api">API</a>
@@ -460,147 +984,123 @@ And never stops — at all —</div>
   </footer>
 
   <script>
-    const corpus = [
+    const poemCorpus = [
       {
+        id: "emily-dickinson-hope",
+        sourceClass: "poem",
         title: "Hope is the Thing with Feathers",
         author: "Emily Dickinson",
-        sourceClass: "poem",
         theme: "hope",
         lines: [
-          "\\"Hope\\" is the thing with feathers —",
+          "“Hope” is the thing with feathers —",
           "That perches in the soul —",
           "And sings the tune without the words —",
           "And never stops — at all —"
-        ],
-        stanzas: [
-          [
-            "\\"Hope\\" is the thing with feathers —",
-            "That perches in the soul —",
-            "And sings the tune without the words —",
-            "And never stops — at all —"
-          ],
-          [
-            "And sweetest — in the Gale — is heard —",
-            "And sore must be the storm —",
-            "That could abash the little Bird",
-            "That kept so many warm —"
-          ]
-        ],
-        paragraphs: [
-          "\\"Hope\\" is the thing with feathers that perches in the soul and sings without ceasing, offering a small yet stubborn sound that remains even when the outer weather becomes severe. Its force is not in volume but in persistence, and that persistence gives the passage its calm strength for readable layout testing.",
-          "The lyric remains useful for interface testing because it combines short clauses, punctuation variation, and visible cadence. It produces text with texture, pause, and shape, which helps layouts feel more realistic than abstract filler."
         ]
       },
       {
-        title: "The Quality of Mercy",
-        author: "William Shakespeare",
-        sourceClass: "literary",
-        theme: "duty",
-        lines: [
-          "The quality of mercy is not strain'd,",
-          "It droppeth as the gentle rain from heaven",
-          "Upon the place beneath. It is twice blest:",
-          "It blesseth him that gives and him that takes."
-        ],
-        stanzas: [
-          [
-            "The quality of mercy is not strain'd,",
-            "It droppeth as the gentle rain from heaven",
-            "Upon the place beneath. It is twice blest:",
-            "It blesseth him that gives and him that takes."
-          ]
-        ],
-        paragraphs: [
-          "The quality of mercy is not forced; it falls with quiet grace and works upon both giver and receiver. The speech is well suited to long-form layout testing because it carries formal syntax, balanced clauses, and a seriousness that resembles persuasive editorial writing.",
-          "Public-domain dramatic passages strengthen PoemFill.dev because they allow developers to test formal language, quoted text, and broader sentence movement. A passage from Shakespeare can fill article cards, text blocks, and reading panes with more realism than a short isolated poem line."
-        ]
-      },
-      {
-        title: "Meditations Highlight",
-        author: "Marcus Aurelius",
-        sourceClass: "philosophy",
-        theme: "reflection",
-        paragraphs: [
-          "You have power over your mind, not over outward events; recognizing that boundary changes the quality of response. A philosophy corpus helps the generator produce long, disciplined paragraphs that feel closer to essays, reflective articles, and thoughtful documentation pages than lyric verse alone.",
-          "A reflective passage also improves product testing because it contains denser syntax and more sustained reasoning. That density is useful for reading surfaces, long cards, legal-style blocks, and interfaces where developers need to observe wrapping, spacing, and vertical rhythm under serious prose.",
-          "When philosophy is included beside poetry, the utility becomes broader. The site can now supply short lyrical lines, measured reflective prose, and mixed public-domain content, which makes the generator more practical for real product teams."
-        ],
-        lines: [
-          "You have power over your mind, not outside events.",
-          "Realize this, and you will find strength.",
-          "The mind becomes dyed with the color of its thoughts.",
-          "The quality of life depends on the quality of thought."
-        ],
-        stanzas: [
-          [
-            "You have power over your mind, not outside events.",
-            "Realize this, and you will find strength.",
-            "The mind becomes dyed with the color of its thoughts.",
-            "The quality of life depends on the quality of thought."
-          ]
-        ]
-      },
-      {
-        title: "Self-Reliance Highlight",
-        author: "Ralph Waldo Emerson",
-        sourceClass: "philosophy",
-        theme: "reflection",
-        paragraphs: [
-          "Trust thyself: every heart vibrates to that iron string. Philosophy excerpts like this help PoemFill.dev generate prose with declarative force, formal cadence, and stronger paragraph density, which is useful for testing article previews and serious product surfaces.",
-          "The advantage of including a philosophy corpus is that the text behaves differently from poetry. It carries continuity across multiple sentences and asks more from the layout, which allows developers to test reading comfort, heading transitions, paragraph spacing, and content hierarchy more realistically."
-        ],
-        lines: [
-          "Trust thyself: every heart vibrates to that iron string.",
-          "Nothing is at last sacred but the integrity of your own mind.",
-          "Speak what you think now in hard words.",
-          "Tomorrow speak what tomorrow thinks in hard words again."
-        ],
-        stanzas: [
-          [
-            "Trust thyself: every heart vibrates to that iron string.",
-            "Nothing is at last sacred but the integrity of your own mind.",
-            "Speak what you think now in hard words.",
-            "Tomorrow speak what tomorrow thinks in hard words again."
-          ]
-        ]
-      },
-      {
-        title: "Song of the Open Road Highlight",
-        author: "Walt Whitman",
+        id: "william-shakespeare-sea",
         sourceClass: "poem",
+        title: "Sea Change",
+        author: "William Shakespeare",
+        theme: "sea",
+        lines: [
+          "Full fathom five thy father lies;",
+          "Of his bones are coral made;",
+          "Those are pearls that were his eyes;",
+          "Nothing of him that doth fade."
+        ]
+      },
+      {
+        id: "marcus-aurelius-reason",
+        sourceClass: "philosophy",
+        title: "On the Directing Mind",
+        author: "Marcus Aurelius",
+        theme: "reason",
+        lines: [
+          "You have power over your mind — not outside events.",
+          "Realize this, and you will find strength.",
+          "The directing mind, when true to nature,",
+          "stands clear in its own work."
+        ]
+      },
+      {
+        id: "ralph-waldo-emerson-nature",
+        sourceClass: "philosophy",
+        title: "Transparent Eyeball",
+        author: "Ralph Waldo Emerson",
         theme: "nature",
         lines: [
-          "Afoot and light-hearted I take to the open road,",
-          "Healthy, free, the world before me,",
-          "The long brown path before me leading wherever I choose,",
-          "Henceforth I ask not good-fortune, I myself am good-fortune."
-        ],
-        stanzas: [
-          [
-            "Afoot and light-hearted I take to the open road,",
-            "Healthy, free, the world before me,",
-            "The long brown path before me leading wherever I choose,",
-            "Henceforth I ask not good-fortune, I myself am good-fortune."
-          ]
-        ],
-        paragraphs: [
-          "Whitman is useful in the generator because the text carries momentum, openness, and long flowing syntax. It supports layouts that need larger sentence shapes, expressive punctuation, and a broader line length than tighter lyric poetry normally provides.",
-          "Public-domain poetry with a looser structure helps mockups feel alive. It gives designers more visual variation and gives developers a better sense of how real content will wrap through responsive surfaces."
+          "Standing on the bare ground — my head bathed by the blithe air,",
+          "and uplifted into infinite space — all mean egotism vanishes.",
+          "I become a transparent eye-ball;",
+          "I am nothing; I see all."
+        ]
+      },
+      {
+        id: "walt-whitman-reflection",
+        sourceClass: "literary-passage",
+        title: "Open Road Reflection",
+        author: "Walt Whitman",
+        theme: "reflection",
+        lines: [
+          "I take to the open road, healthy, free, the world before me,",
+          "The long brown path before me leading wherever I choose.",
+          "Henceforth I ask not good-fortune, I myself am good-fortune,",
+          "Henceforth I whimper no more, postpone no more, need nothing."
+        ]
+      },
+      {
+        id: "william-shakespeare-evening",
+        sourceClass: "literary-passage",
+        title: "The Dying of the Day",
+        author: "William Shakespeare",
+        theme: "evening",
+        lines: [
+          "That time of year thou mayst in me behold",
+          "When yellow leaves, or none, or few, do hang",
+          "Upon those boughs which shake against the cold,",
+          "Bare ruin'd choirs, where late the sweet birds sang."
+        ]
+      },
+      {
+        id: "ralph-waldo-emerson-self",
+        sourceClass: "philosophy",
+        title: "Trust Thyself",
+        author: "Ralph Waldo Emerson",
+        theme: "self",
+        lines: [
+          "Trust thyself: every heart vibrates to that iron string.",
+          "Accept the place the divine providence has found for you;",
+          "the society of your contemporaries, the connection of events.",
+          "Great men have always done so."
         ]
       }
     ];
 
+    const STRUCTURE_LABELS = {
+      paragraph: "Paragraph Count",
+      lines: "Line Count",
+      stanza: "Stanza Count",
+      excerpt: "Excerpt Size"
+    };
+
+    const STRUCTURE_HELPERS = {
+      paragraph: "Generate 4 paragraphs of structured public-domain text.",
+      lines: "Generate an exact number of lines.",
+      stanza: "Generate grouped stanza blocks.",
+      excerpt: "Generate a short excerpt sized by word length."
+    };
+
     const elements = {
       sourceClass: document.getElementById("sourceClass"),
-      sourceClassHelp: document.getElementById("sourceClassHelp"),
-      contentStructure: document.getElementById("contentStructure"),
-      structureHelp: document.getElementById("structureHelp"),
+      contentType: document.getElementById("contentType"),
       theme: document.getElementById("theme"),
       author: document.getElementById("author"),
       outputFormat: document.getElementById("outputFormat"),
-      outputAmount: document.getElementById("outputAmount"),
-      outputAmountLabel: document.getElementById("outputAmountLabel"),
-      amountHelp: document.getElementById("amountHelp"),
+      amount: document.getElementById("amount"),
+      amountLabel: document.getElementById("amountLabel"),
+      amountHelper: document.getElementById("amountHelper"),
       showTitle: document.getElementById("showTitle"),
       showAuthor: document.getElementById("showAuthor"),
       preserveBreaks: document.getElementById("preserveBreaks"),
@@ -616,119 +1116,146 @@ And never stops — at all —</div>
       metaLine: document.getElementById("metaLine"),
       statusLine: document.getElementById("statusLine"),
       metaAuthor: document.getElementById("metaAuthor"),
-      metaType: document.getElementById("metaType"),
       metaTheme: document.getElementById("metaTheme"),
+      metaSourceClass: document.getElementById("metaSourceClass"),
       metaRights: document.getElementById("metaRights")
     };
 
-    const structureUiText = {
-      paragraph: {
-        label: "Paragraph Count",
-        help: (value) => `Returns ${value} full paragraph${value === 1 ? "" : "s"} when paragraph mode is selected.`,
-        structureHelp: "Generates full paragraphs from longer public-domain text."
-      },
-      lines: {
-        label: "Line Count",
-        help: (value) => `Returns exactly ${value} line${value === 1 ? "" : "s"} with preserved line breaks when available.`,
-        structureHelp: "Returns exact line count with preserved line breaks."
-      },
-      stanza: {
-        label: "Stanza Count",
-        help: (value) => `Returns ${value} grouped stanza block${value === 1 ? "" : "s"} from the selected source class.`,
-        structureHelp: "Returns grouped verse blocks or paragraph groups."
-      },
-      excerpt: {
-        label: "Excerpt Size",
-        help: (value) => `Returns a shorter compact excerpt shaped by the selected source class and size value of ${value}.`,
-        structureHelp: "Returns a shorter compact selection."
-      }
-    };
-
-    const sourceClassHelpText = {
-      mixed: "Blends poetry, philosophy, and literary passages for broader layout testing.",
-      poem: "Best for verse-style output, preserved lines, and stanza groupings.",
-      philosophy: "Best for denser reflective paragraphs and formal prose testing.",
-      literary: "Best for dramatic or literary passages with broader editorial tone."
-    };
-
-    function updateDynamicUiText() {
-      const structure = elements.contentStructure.value;
-      const amount = Number(elements.outputAmount.value || 1);
-      const sourceClass = elements.sourceClass.value;
-      elements.outputAmountLabel.textContent = structureUiText[structure].label;
-      elements.amountHelp.textContent = structureUiText[structure].help(amount);
-      elements.structureHelp.textContent = structureUiText[structure].structureHelp;
-      elements.sourceClassHelp.textContent = sourceClassHelpText[sourceClass];
+    function toTitleCase(value) {
+      return value
+        .split("-")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
     }
 
-    function filterEntries() {
-      const sourceClass = elements.sourceClass.value;
-      const theme = elements.theme.value;
-      const author = elements.author.value;
-      let filtered = corpus.filter((entry) => {
-        const sourceClassMatch = sourceClass === "mixed" || entry.sourceClass === sourceClass;
-        const themeMatch = theme === "any" || entry.theme === theme;
-        const authorMatch = author === "any" || entry.author === author;
+    function clampAmount(value) {
+      return Math.max(1, Math.min(12, Number.isFinite(value) ? value : 4));
+    }
+
+    function getRequestState() {
+      return {
+        sourceClass: elements.sourceClass.value,
+        contentType: elements.contentType.value,
+        theme: elements.theme.value,
+        author: elements.author.value,
+        outputFormat: elements.outputFormat.value,
+        amount: clampAmount(Number(elements.amount.value || 4)),
+        options: {
+          showTitle: elements.showTitle.checked,
+          showAuthor: elements.showAuthor.checked,
+          preserveBreaks: elements.preserveBreaks.checked,
+          compactSpacing: elements.compactSpacing.checked
+        }
+      };
+    }
+
+    function updateAmountUi() {
+      const contentType = elements.contentType.value;
+      elements.amountLabel.textContent = STRUCTURE_LABELS[contentType] || "Length / Count";
+      elements.amountHelper.textContent = STRUCTURE_HELPERS[contentType] || "Set the output amount.";
+    }
+
+    function resolveCorpusEntries(request) {
+      let filteredEntries = poemCorpus.filter((entry) => {
+        const sourceClassMatch = request.sourceClass === "any" || entry.sourceClass === request.sourceClass;
+        const themeMatch = request.theme === "any" || entry.theme === request.theme;
+        const authorMatch = request.author === "any" || entry.author === request.author;
         return sourceClassMatch && themeMatch && authorMatch;
       });
-      if (filtered.length === 0) filtered = corpus.filter((entry) => sourceClass === "mixed" || entry.sourceClass === sourceClass);
-      if (filtered.length === 0) filtered = [...corpus];
-      return filtered;
+
+      let fallbackApplied = false;
+
+      if (filteredEntries.length === 0) {
+        fallbackApplied = true;
+        filteredEntries = poemCorpus.filter((entry) => {
+          const sourceClassMatch = request.sourceClass === "any" || entry.sourceClass === request.sourceClass;
+          const themeMatch = request.theme === "any" || entry.theme === request.theme;
+          return sourceClassMatch && themeMatch;
+        });
+      }
+
+      if (filteredEntries.length === 0) {
+        fallbackApplied = true;
+        filteredEntries = poemCorpus.filter((entry) => {
+          return request.sourceClass === "any" || entry.sourceClass === request.sourceClass;
+        });
+      }
+
+      if (filteredEntries.length === 0) {
+        fallbackApplied = true;
+        filteredEntries = [...poemCorpus];
+      }
+
+      return {
+        entries: filteredEntries,
+        fallbackApplied
+      };
     }
 
-    function chooseEntry() {
-      const entries = filterEntries();
-      return entries[Math.floor(Math.random() * entries.length)];
-    }
-
-    function repeatFromArray(items, count) {
+    function rotateEntries(entries, count) {
       const output = [];
-      let index = 0;
-      while (output.length < count && items.length > 0) {
-        output.push(items[index % items.length]);
-        index += 1;
+      for (let index = 0; index < count; index += 1) {
+        output.push(entries[index % entries.length]);
       }
       return output;
     }
 
-    function buildParagraphOutput(entry, count) {
-      const paragraphs = entry.paragraphs && entry.paragraphs.length
-        ? entry.paragraphs
-        : [(entry.lines || []).join(" ").replace(/\\s+/g, " ").trim()];
-      return repeatFromArray(paragraphs, count).join("\\n\\n");
+    function buildParagraphOutput(entries, amount) {
+      const selectedEntries = rotateEntries(entries, amount);
+      return selectedEntries
+        .map((entry) => entry.lines.join(" ").replace(/\s+/g, " ").trim())
+        .join("\\n\\n");
     }
 
-    function buildLineOutput(entry, count) {
-      const lines = entry.lines && entry.lines.length
-        ? entry.lines
-        : ((entry.paragraphs || []).join(" ").match(/[^.!?]+[.!?]?/g) || []).map((sentence) => sentence.trim()).filter(Boolean);
-      return repeatFromArray(lines, count).join("\\n");
+    function buildLinesOutput(entries, amount) {
+      const selectedEntries = rotateEntries(entries, Math.max(1, Math.ceil(amount / 4)));
+      const combinedLines = selectedEntries.flatMap((entry) => entry.lines);
+      return combinedLines.slice(0, amount).join("\\n");
     }
 
-    function buildStanzaOutput(entry, count) {
-      const stanzas = entry.stanzas && entry.stanzas.length
-        ? entry.stanzas.map((stanza) => stanza.join("\\n"))
-        : (entry.paragraphs || []).map((paragraph) => (paragraph.match(/[^.!?]+[.!?]?/g) || []).map((part) => part.trim()).filter(Boolean).slice(0, 4).join("\\n") || paragraph);
-      return repeatFromArray(stanzas, count).join("\\n\\n");
+    function buildStanzaOutput(entries, amount) {
+      const selectedEntries = rotateEntries(entries, amount);
+      return selectedEntries
+        .map((entry) => entry.lines.join("\\n"))
+        .join("\\n\\n");
     }
 
-    function buildExcerptOutput(entry, sizeValue) {
-      const baseText = (entry.paragraphs && entry.paragraphs.length ? entry.paragraphs.join(" ") : (entry.lines || []).join(" "))
+    function buildExcerptOutput(entries, amount) {
+      const selectedEntries = rotateEntries(entries, Math.max(1, Math.ceil(amount / 2)));
+      const combinedText = selectedEntries
+        .map((entry) => entry.lines.join(" "))
+        .join(" ")
         .replace(/\\s+/g, " ")
         .trim();
-      const targetWords = Math.max(18, sizeValue * 12);
-      return baseText.split(" ").slice(0, targetWords).join(" ");
+
+      const excerptWords = combinedText.split(" ").slice(0, Math.max(12, amount * 8));
+      return excerptWords.join(" ").replace(/[\\s.,;:!?-]+$/, "") + ".";
     }
 
-    function buildBody(entry, structure, count, options) {
+    function buildBody(entries, type, amount, options) {
       let body = "";
-      if (structure === "lines") body = buildLineOutput(entry, count);
-      else if (structure === "stanza") body = buildStanzaOutput(entry, count);
-      else if (structure === "excerpt") body = buildExcerptOutput(entry, count);
-      else body = buildParagraphOutput(entry, count);
 
-      if (!options.preserveBreaks) body = body.replace(/\\n+/g, " ");
-      if (options.compactSpacing) body = body.replace(/\\n{3,}/g, "\\n\\n").replace(/[ ]{2,}/g, " ").trim();
+      if (type === "lines") {
+        body = buildLinesOutput(entries, amount);
+      } else if (type === "stanza") {
+        body = buildStanzaOutput(entries, amount);
+      } else if (type === "excerpt") {
+        body = buildExcerptOutput(entries, amount);
+      } else {
+        body = buildParagraphOutput(entries, amount);
+      }
+
+      if (!options.preserveBreaks) {
+        body = body.replace(/\\n+/g, " ");
+      }
+
+      if (options.compactSpacing) {
+        body = body
+          .replace(/\\n{3,}/g, "\\n\\n")
+          .replace(/[ ]{2,}/g, " ")
+          .trim();
+      }
+
       return body.trim();
     }
 
@@ -737,56 +1264,93 @@ And never stops — at all —</div>
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
-        .replace(/\\"/g, "&quot;")
+        .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
     }
 
-    function formatOutput(title, author, body, format, options) {
-      const displayTitle = options.showTitle ? title : "";
-      const displayAuthor = options.showAuthor ? author : "";
-      if (format === "html") {
-        const heading = options.showTitle ? `  <h3>${escapeHtml(title)}</h3>\\n` : "";
-        const byline = options.showAuthor ? `  <p><em>${escapeHtml(author)}</em></p>\\n` : "";
+    function formatOutput(primaryEntry, body, request, matchedEntries, fallbackApplied) {
+      const displayTitle = request.options.showTitle ? primaryEntry.title : "";
+      const displayAuthor = request.options.showAuthor ? primaryEntry.author : "";
+
+      if (request.outputFormat === "html") {
+        const heading = request.options.showTitle ? `  <h3>${escapeHtml(primaryEntry.title)}</h3>\\n` : "";
+        const byline = request.options.showAuthor ? `  <p><em>${escapeHtml(primaryEntry.author)}</em></p>\\n` : "";
         return `<article>\\n${heading}${byline}  <div>${escapeHtml(body).replace(/\\n/g, "<br />")}</div>\\n</article>`;
       }
-      if (format === "markdown") {
-        const heading = options.showTitle ? `### ${title}\\n` : "";
-        const byline = options.showAuthor ? `*${author}*\\n\\n` : "";
+
+      if (request.outputFormat === "markdown") {
+        const heading = request.options.showTitle ? `### ${primaryEntry.title}\\n` : "";
+        const byline = request.options.showAuthor ? `*${primaryEntry.author}*\\n\\n` : "";
         return `${heading}${byline}${body}`;
       }
-      if (format === "json") {
-        return JSON.stringify({ success: true, sourceType: "public-domain-demo", result: { title: displayTitle || null, author: displayAuthor || null, text: body } }, null, 2);
+
+      if (request.outputFormat === "json") {
+        return JSON.stringify(
+          {
+            success: true,
+            sourceType: "structured-public-domain-demo",
+            fallbackApplied,
+            request: {
+              sourceClass: request.sourceClass,
+              contentType: request.contentType,
+              theme: request.theme,
+              author: request.author,
+              amount: request.amount,
+              outputFormat: request.outputFormat
+            },
+            result: {
+              title: displayTitle || null,
+              author: displayAuthor || null,
+              sourceClass: primaryEntry.sourceClass,
+              matchedEntries,
+              text: body
+            }
+          },
+          null,
+          2
+        );
       }
+
       let prefix = "";
-      if (options.showTitle) prefix += `${title}\\n`;
-      if (options.showAuthor) prefix += `— ${author}\\n\\n`;
+
+      if (request.options.showTitle) {
+        prefix += `${primaryEntry.title}\\n`;
+      }
+
+      if (request.options.showAuthor) {
+        prefix += `— ${primaryEntry.author}\\n\\n`;
+      }
+
       return `${prefix}${body}`.trim();
     }
 
     function updateOutput() {
-      updateDynamicUiText();
-      const entry = chooseEntry();
-      const structure = elements.contentStructure.value;
-      const count = Number(elements.outputAmount.value || 1);
-      const options = {
-        showTitle: elements.showTitle.checked,
-        showAuthor: elements.showAuthor.checked,
-        preserveBreaks: elements.preserveBreaks.checked,
-        compactSpacing: elements.compactSpacing.checked
-      };
-      const body = buildBody(entry, structure, count, options);
-      const formattedOutput = formatOutput(entry.title, entry.author, body, elements.outputFormat.value, options);
+      updateAmountUi();
 
-      elements.outputTitle.textContent = options.showTitle ? entry.title : "Generated Output";
-      elements.metaAuthor.textContent = entry.author;
-      elements.metaType.textContent = entry.sourceClass.charAt(0).toUpperCase() + entry.sourceClass.slice(1);
-      elements.metaTheme.textContent = entry.theme.charAt(0).toUpperCase() + entry.theme.slice(1);
+      const request = getRequestState();
+      elements.amount.value = request.amount;
+
+      const { entries, fallbackApplied } = resolveCorpusEntries(request);
+      const primaryEntry = entries[0];
+      const body = buildBody(entries, request.contentType, request.amount, request.options);
+      const formattedOutput = formatOutput(primaryEntry, body, request, entries.length, fallbackApplied);
+
+      elements.outputTitle.textContent = request.options.showTitle ? primaryEntry.title : "Generated Output";
+      elements.metaAuthor.textContent = primaryEntry.author;
+      elements.metaTheme.textContent = toTitleCase(primaryEntry.theme);
+      elements.metaSourceClass.textContent = toTitleCase(primaryEntry.sourceClass);
       elements.metaRights.textContent = "Public-domain demo corpus";
       elements.outputText.textContent = formattedOutput;
-      elements.metaLine.textContent = `Source: Demo corpus · Structure: ${structure.charAt(0).toUpperCase() + structure.slice(1)} · Format: ${elements.outputFormat.value}`;
-      elements.statusLine.textContent = "Generated";
-      elements.heroPreview.textContent = (entry.lines && entry.lines.length ? entry.lines.slice(0, 4) : body.split(/\\n|\\./).filter(Boolean).slice(0, 4)).join("\\n");
-      elements.outputMeta.style.display = (options.showTitle || options.showAuthor) ? "flex" : "none";
+      elements.metaLine.textContent =
+        `Source: Demo corpus · Class: ${toTitleCase(primaryEntry.sourceClass)} · Theme: ${toTitleCase(primaryEntry.theme)} · Format: ${request.outputFormat}`;
+      elements.statusLine.textContent = fallbackApplied ? "Generated with fallback match" : "Generated";
+      elements.heroPreview.textContent = primaryEntry.lines.join("\\n");
+
+      if (!request.options.showTitle && !request.options.showAuthor) {
+        elements.outputMeta.style.display = "none";
+      } else {
+        elements.outputMeta.style.display = "flex";
+      }
     }
 
     async function copyOutputToClipboard() {
@@ -799,25 +1363,33 @@ And never stops — at all —</div>
     }
 
     function downloadOutput() {
-      const blob = new Blob([elements.outputText.textContent], { type: "text/plain;charset=utf-8" });
+      const blob = new Blob([elements.outputText.textContent], {
+        type: "text/plain;charset=utf-8"
+      });
+
       const objectUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
+
       link.href = objectUrl;
       link.download = "poemfill-output.txt";
       document.body.appendChild(link);
       link.click();
       link.remove();
-      URL.revokeObjectURL(objectUrl);
+
+      window.setTimeout(() => {
+        URL.revokeObjectURL(objectUrl);
+      }, 200);
+
       elements.statusLine.textContent = "TXT download started";
     }
 
     function resetControls() {
-      elements.sourceClass.value = "mixed";
-      elements.contentStructure.value = "paragraph";
+      elements.sourceClass.value = "any";
+      elements.contentType.value = "paragraph";
       elements.theme.value = "any";
       elements.author.value = "any";
       elements.outputFormat.value = "text";
-      elements.outputAmount.value = 3;
+      elements.amount.value = 4;
       elements.showTitle.checked = true;
       elements.showAuthor.checked = true;
       elements.preserveBreaks.checked = true;
@@ -826,48 +1398,25 @@ And never stops — at all —</div>
       elements.statusLine.textContent = "Reset complete";
     }
 
-    [elements.sourceClass, elements.contentStructure, elements.theme, elements.author, elements.outputFormat, elements.outputAmount].forEach((element) => {
-      element.addEventListener("change", updateDynamicUiText);
-      element.addEventListener("input", updateDynamicUiText);
-    });
-
+    elements.contentType.addEventListener("change", updateAmountUi);
     elements.generateButton.addEventListener("click", updateOutput);
     elements.copyButton.addEventListener("click", copyOutputToClipboard);
     elements.downloadButton.addEventListener("click", downloadOutput);
     elements.resetButton.addEventListener("click", resetControls);
 
+    updateAmountUi();
     updateOutput();
   </script>
 </body>
 </html>
-"""
+""")
 
-readme = """PoemFill.dev UI package
+out_html = Path("/mnt/data/index.html")
+out_html.write_text(html, encoding="utf-8")
 
-Contents:
-- index.html
-- README.txt
-
-Included in this upgraded single-file UI:
-- Editorial Warm Neutral palette
-- Typography refinements
-- Source Class control
-- Content Structure control
-- Longer paragraph output logic
-- Philosophy + literary passage demo corpus
-- Dynamic count labeling
-- Copy and download actions
-"""
-
-base = Path("/mnt/data/poemfill_ui_package")
-base.mkdir(exist_ok=True)
-(base / "index.html").write_text(html, encoding="utf-8")
-(base / "README.txt").write_text(readme, encoding="utf-8")
-
-zip_path = Path("/mnt/data/poemfill-index-html-upgrade.zip")
+zip_path = Path("/mnt/data/poemfill_dev_updated_index.zip")
 with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-    zf.write(base / "index.html", arcname="index.html")
-    zf.write(base / "README.txt", arcname="README.txt")
+    zf.write(out_html, arcname="index.html")
 
-print(f"Created {zip_path}")
-print(f"Created {base / 'index.html'}")
+print(str(out_html))
+print(str(zip_path))
