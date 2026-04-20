@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<!-- File: poemfill-utility-demo.html -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PoemFill.io — Utility Website Demo</title>
+  <style>
+    :root {
+      --bg: #f7f5f0;
+      --panel: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --brand: #2563eb;
+      --brand-soft: #dbeafe;
+      --accent: #8b938c;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(139, 147, 140, 0.10), transparent 22%),
+        var(--bg);
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      background: rgba(247, 245, 240, 0.88);
+      border-bottom: 1px solid rgba(229, 231, 235, 0.85);
+      z-index: 20;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 74px;
+      gap: 20px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--brand), #7aa2ff);
+      color: #fff;
+      box-shadow: var(--shadow);
+      font-size: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: 48px 0 26px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero-card,
+    .panel,
+    .ad-card,
+    .feature-card,
+    .api-card {
+      background: var(--panel);
+      border: 1px solid rgba(229, 231, 235, 0.95);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      margin-top: 16px;
+      font-size: clamp(2rem, 5vw, 3.7rem);
+      line-height: 1.02;
+    }
+
+    .hero-copy p {
+      margin: 18px 0 0;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #465063;
+      max-width: 62ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    button,
+    .button-link,
+    select,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    .button-link {
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 18px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover,
+    .button-link:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.24);
+    }
+
+    .button-secondary {
+      background: #eff6ff;
+      color: var(--brand);
+      border: 1px solid #bfdbfe;
+    }
+
+    .hero-preview {
+      padding: 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .preview-block {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      padding: 18px;
+      background: linear-gradient(180deg, #fcfcfd, #f8fafc);
+    }
+
+    .preview-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .preview-poem {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      font-size: 15px;
+      color: #273244;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 22px;
+      padding-bottom: 42px;
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .panel h2 {
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+    }
+
+    .subtext {
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      color: #475569;
+      font-weight: 700;
+    }
+
+    select,
+    input[type="number"] {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfbfc;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .output-shell {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .output-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fafafa;
+      flex-wrap: wrap;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    #output {
+      min-height: 260px;
+      padding: 20px;
+      margin: 0;
+      white-space: pre-wrap;
+      line-height: 1.82;
+      font-size: 15px;
+      color: #1f2937;
+      overflow: auto;
+      background: linear-gradient(180deg, #fff, #fdfdfd);
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .ad-card,
+    .feature-card,
+    .api-card {
+      padding: 18px;
+    }
+
+    .card-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .ad-box {
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 16px;
+      background: #fafcff;
+      color: #334155;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .mini-list {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: #475569;
+      line-height: 1.7;
+    }
+
+    .code {
+      margin-top: 10px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      overflow-x: auto;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      padding: 10px 0 54px;
+    }
+
+    .feature-card {
+      padding: 22px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: #475569;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    footer {
+      border-top: 1px solid rgba(229, 231, 235, 0.95);
+      padding: 28px 0 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .main-grid,
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .controls,
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        padding: 8px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <div class="logo-mark">✦</div>
+        <div>PoemFill.io</div>
+      </div>
+      <nav class="nav-links">
+        <a href="#generator">Generator</a>
+        <a href="#features">Features</a>
+        <a href="#api">API Demo</a>
+        <a href="#policy">Public Domain Policy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-card hero-copy">
+        <div class="eyebrow">Public-domain placeholder text for developers and designers</div>
+        <h1>Generate beautiful poem text for mockups, demos, and creative layouts</h1>
+        <p>
+          PoemFill.io replaces generic filler text with curated public-domain verse. Use it for hero sections,
+          cards, editorial previews, newsletters, prototypes, and developer test data.
+        </p>
+        <div class="hero-actions">
+          <a class="button-link button-primary" href="#generator">Generate Poem Text</a>
+          <a class="button-link button-secondary" href="#api">View API Demo</a>
+        </div>
+      </div>
+
+      <div class="hero-card hero-preview">
+        <div class="preview-block">
+          <div class="preview-label">Sample output</div>
+          <div class="preview-poem" id="heroPreview">The dusk leaned softly on the hill,
+And fields grew pale and deep and still,
+While one clear star above the trees
+Stood waiting in the evening breeze.</div>
+        </div>
+        <div class="preview-block">
+          <div class="preview-label">Formats</div>
+          <div class="preview-poem">Plain Text · HTML · Markdown · JSON</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="main-grid" id="generator">
+      <div class="panel">
+        <h2>Poem text generator</h2>
+        <div class="subtext">
+          Choose a content style, theme, author filter, and output format. This demo uses a built-in sample
+          public-domain-inspired corpus so you can test the utility website structure immediately.
+        </div>
+
+        <div class="controls">
+          <div class="field">
+            <label for="contentType">Content Type</label>
+            <select id="contentType">
+              <option value="paragraph">Paragraph</option>
+              <option value="lines">Lines</option>
+              <option value="stanza">Stanza</option>
+              <option value="excerpt">Short Excerpt</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="theme">Theme</label>
+            <select id="theme">
+              <option value="any">Any Theme</option>
+              <option value="nature">Nature</option>
+              <option value="sea">Sea</option>
+              <option value="evening">Evening</option>
+              <option value="hope">Hope</option>
+              <option value="reflection">Reflection</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="author">Author Filter</label>
+            <select id="author">
+              <option value="any">Any Author</option>
+              <option value="Emily Dickinson">Emily Dickinson</option>
+              <option value="Walt Whitman">Walt Whitman</option>
+              <option value="Henry Wadsworth Longfellow">Henry Wadsworth Longfellow</option>
+              <option value="Christina Rossetti">Christina Rossetti</option>
+              <option value="Public Domain Collection">Public Domain Collection</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="outputFormat">Output Format</label>
+            <select id="outputFormat">
+              <option value="text">Plain Text</option>
+              <option value="html">HTML</option>
+              <option value="markdown">Markdown</option>
+              <option value="json">JSON</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="amount">Length / Count</label>
+            <input id="amount" type="number" min="1" max="12" value="4" />
+          </div>
+
+          <div class="field full">
+            <label>Formatting Options</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" id="showTitle" checked /> Show title</label>
+              <label class="checkbox-item"><input type="checkbox" id="showAuthor" checked /> Show author</label>
+              <label class="checkbox-item"><input type="checkbox" id="preserveBreaks" checked /> Preserve line breaks</label>
+              <label class="checkbox-item"><input type="checkbox" id="compactSpacing" /> Compact spacing</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="button-primary" id="generateButton">Generate</button>
+          <button class="button-secondary" id="copyButton">Copy</button>
+          <button class="button-secondary" id="downloadButton">Download TXT</button>
+          <button class="button-secondary" id="resetButton">Reset</button>
+        </div>
+
+        <div class="output-shell">
+          <div class="output-toolbar">
+            <div class="meta" id="metaLine">Source: Sample Public Domain Demo Corpus</div>
+            <div class="meta" id="statusLine">Ready</div>
+          </div>
+          <pre id="output"></pre>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="ad-card">
+          <div class="card-kicker">Sponsored placement</div>
+          <div class="ad-box">
+            <strong>Developer tools ad slot</strong><br />
+            This is where a clean revenue ad could appear on the free tier without interrupting the generated output.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="card-kicker">Use cases</div>
+          <ul class="mini-list">
+            <li>Landing page placeholders</li>
+            <li>Editorial demo blocks</li>
+            <li>Newsletter previews</li>
+            <li>Mockup cards and dashboards</li>
+          </ul>
+        </div>
+
+        <div class="api-card" id="api">
+          <div class="card-kicker">API demo</div>
+          <div class="code">GET /api/v1/generate?type=lines&amp;theme=nature&amp;count=4&amp;format=json</div>
+          <div class="subtext" style="margin: 12px 0 0;">
+            Usage-based API access could be offered on a paid plan while the public site remains ad-supported.
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="features" id="features">
+      <div class="feature-card">
+        <div class="card-kicker">Readable filler</div>
+        <h3>Better than generic placeholder text</h3>
+        <p>Replace pseudo-Latin blocks with literary public-domain content that looks stronger in polished design work.</p>
+      </div>
+      <div class="feature-card">
+        <div class="card-kicker">Flexible output</div>
+        <h3>Export in multiple formats</h3>
+        <p>Return plain text, HTML, Markdown, or JSON depending on whether the user is designing, coding, or testing content flows.</p>
+      </div>
+      <div class="feature-card">
+        <div class="card-kicker">Monetization</div>
+        <h3>Supports ads and API revenue</h3>
+        <p>Free users can see restrained ad placements while advanced teams can subscribe for ad-free access and higher API limits.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer id="policy">
+    <div class="container footer-grid">
+      <div>
+        <strong>PoemFill.io Demo</strong><br />
+        Utility website example for curated public-domain-style poem text generation.
+      </div>
+      <div>
+        Public Domain Policy: use only verified public-domain text sources before production launch.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const poemCorpus = [
+      {
+        title: "Morning Field",
+        author: "Emily Dickinson",
+        theme: "nature",
+        lines: [
+          "A bird came down the walk at dawn,",
+          "And light lay thin upon the lawn,",
+          "The clover kept the silver dew,",
+          "And morning moved in quiet blue."
+        ]
+      },
+      {
+        title: "Evening Star",
+        author: "Henry Wadsworth Longfellow",
+        theme: "evening",
+        lines: [
+          "The dusk leaned softly on the hill,",
+          "And fields grew pale and deep and still,",
+          "While one clear star above the trees",
+          "Stood waiting in the evening breeze."
+        ]
+      },
+      {
+        title: "Sea Air",
+        author: "Public Domain Collection",
+        theme: "sea",
+        lines: [
+          "The sea awoke beneath the day,",
+          "And carried bands of light away,",
+          "The shore received the wind and foam,",
+          "As if the restless tide were home."
+        ]
+      },
+      {
+        title: "Calm Resolve",
+        author: "Christina Rossetti",
+        theme: "hope",
+        lines: [
+          "Hope rose quietly with the light,",
+          "Not loud, but clear, and finely bright,",
+          "A steady thing the dark could not",
+          "Unmake, undo, or leave forgot."
+        ]
+      },
+      {
+        title: "Open Road Reflection",
+        author: "Walt Whitman",
+        theme: "reflection",
+        lines: [
+          "I walked where fields and thought agree,",
+          "And found a larger room in me,",
+          "The road ran outward, wide and plain,",
+          "Yet brought me inward once again."
+        ]
+      },
+      {
+        title: "Wind in Leaves",
+        author: "Public Domain Collection",
+        theme: "nature",
+        lines: [
+          "The leaves conversed in tender air,",
+          "The branches moved without a care,",
+          "And every quiet root and stone",
+          "Seemed, for an hour, entirely known."
+        ]
+      }
+    ];
+
+    function chooseEntries() {
+      const theme = document.getElementById("theme").value;
+      const author = document.getElementById("author").value;
+
+      let filtered = poemCorpus.filter(item => {
+        const themeMatch = theme === "any" || item.theme === theme;
+        const authorMatch = author === "any" || item.author === author;
+        return themeMatch && authorMatch;
+      });
+
+      if (filtered.length === 0) {
+        filtered = poemCorpus.slice();
+      }
+
+      return filtered[Math.floor(Math.random() * filtered.length)];
+    }
+
+    function buildText(entry, type, amount, options) {
+      const titleLine = options.showTitle ? entry.title + "\n" : "";
+      const authorLine = options.showAuthor ? "— " + entry.author + "\n\n" : "";
+
+      let body = "";
+
+      if (type === "lines") {
+        body = entry.lines.slice(0, amount).join("\n");
+      } else if (type === "stanza") {
+        const stanzaLines = [];
+        for (let index = 0; index < amount; index += 1) {
+          stanzaLines.push(entry.lines[index % entry.lines.length]);
+          if ((index + 1) % 4 === 0 && index !== amount - 1) {
+            stanzaLines.push("");
+          }
+        }
+        body = stanzaLines.join("\n");
+      } else if (type === "excerpt") {
+        const excerpt = entry.lines.join(" ").replace(/\s+/g, " ").trim();
+        const words = excerpt.split(" ").slice(0, Math.max(8, amount * 4));
+        body = words.join(" ") + ".";
+      } else {
+        const paragraph = entry.lines.join(" ").replace(/\s+/g, " ").trim();
+        const repeated = [];
+        for (let index = 0; index < Math.max(1, Math.ceil(amount / 2)); index += 1) {
+          repeated.push(paragraph);
+        }
+        body = repeated.join(" ");
+      }
+
+      if (!options.preserveBreaks) {
+        body = body.replace(/\n+/g, " ");
+      }
+
+      if (options.compactSpacing) {
+        body = body.replace(/\n{3,}/g, "\n\n").replace(/[ ]{2,}/g, " ");
+      }
+
+      return { titleLine, authorLine, body };
+    }
+
+    function formatOutput(payload, format) {
+      if (format === "html") {
+        return `<article>\n  <h3>${payload.title}</h3>\n  <p><em>${payload.author}</em></p>\n  <div>${payload.body.replace(/\n/g, "<br />")}</div>\n</article>`;
+      }
+
+      if (format === "markdown") {
+        return `### ${payload.title}\n*${payload.author}*\n\n${payload.body}`;
+      }
+
+      if (format === "json") {
+        return JSON.stringify({
+          success: true,
+          sourceType: "public-domain-poem-demo",
+          result: {
+            title: payload.title,
+            author: payload.author,
+            text: payload.body
+          }
+        }, null, 2);
+      }
+
+      return `${payload.prefix}${payload.body}`;
+    }
+
+    function generateOutput() {
+      const entry = chooseEntries();
+      const contentType = document.getElementById("contentType").value;
+      const amount = Number(document.getElementById("amount").value || 4);
+      const outputFormat = document.getElementById("outputFormat").value;
+      const options = {
+        showTitle: document.getElementById("showTitle").checked,
+        showAuthor: document.getElementById("showAuthor").checked,
+        preserveBreaks: document.getElementById("preserveBreaks").checked,
+        compactSpacing: document.getElementById("compactSpacing").checked
+      };
+
+      const built = buildText(entry, contentType, amount, options);
+      const payload = {
+        title: entry.title,
+        author: entry.author,
+        body: built.body,
+        prefix: `${built.titleLine}${built.authorLine}`
+      };
+
+      const result = formatOutput(payload, outputFormat);
+      document.getElementById("output").textContent = result;
+      document.getElementById("metaLine").textContent =
+        `Source: Demo corpus · Theme: ${entry.theme} · Format: ${outputFormat}`;
+      document.getElementById("statusLine").textContent = "Generated";
+      document.getElementById("heroPreview").textContent = entry.lines.join("\n");
+    }
+
+    async function copyOutput() {
+      const output = document.getElementById("output").textContent;
+      try {
+        await navigator.clipboard.writeText(output);
+        document.getElementById("statusLine").textContent = "Copied to clipboard";
+      } catch (error) {
+        document.getElementById("statusLine").textContent = "Copy blocked by browser";
+      }
+    }
+
+    function downloadOutput() {
+      const output = document.getElementById("output").textContent;
+      const blob = new Blob([output], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "poemfill-output.txt";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(link.href);
+      document.getElementById("statusLine").textContent = "TXT download started";
+    }
+
+    function resetControls() {
+      document.getElementById("contentType").value = "paragraph";
+      document.getElementById("theme").value = "any";
+      document.getElementById("author").value = "any";
+      document.getElementById("outputFormat").value = "text";
+      document.getElementById("amount").value = 4;
+      document.getElementById("showTitle").checked = true;
+      document.getElementById("showAuthor").checked = true;
+      document.getElementById("preserveBreaks").checked = true;
+      document.getElementById("compactSpacing").checked = false;
+      generateOutput();
+      document.getElementById("statusLine").textContent = "Reset complete";
+    }
+
+    document.getElementById("generateButton").addEventListener("click", generateOutput);
+    document.getElementById("copyButton").addEventListener("click", copyOutput);
+    document.getElementById("downloadButton").addEventListener("click", downloadOutput);
+    document.getElementById("resetButton").addEventListener("click", resetControls);
+
+    generateOutput();
+  </script>
+</body>
+</html>
