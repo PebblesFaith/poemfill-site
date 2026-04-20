@@ -1,13 +1,13 @@
 <!-- File: index.html -->
 <!DOCTYPE html>
-<html lang="en" data-theme="palette-b">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PoemFill.dev — Prompt Builder</title>
     <meta
       name="description"
-      content="PoemFill.dev prompt builder for themes, authorships, content types, and structured long-form literary generation."
+      content="PoemFill.dev prompt builder for themes, authorships, content types, structured literary generation, and sponsored editorial visibility placements."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,7 +22,7 @@
       <header class="hero">
         <div class="hero-copy-block">
           <p class="eyebrow">PoemFill.dev</p>
-          <h1>Structured literary prompt building with an editorial interface.</h1>
+          <h1>Structured literary prompt building with a warm editorial interface.</h1>
           <p class="hero-copy">
             Build consistent literary prompts with aligned controls for theme, authorship, source
             work, content type, tone, composition length, and optional enrichment layers.
@@ -34,50 +34,101 @@
             <span class="hero-chip">Live prompt preview</span>
           </div>
 
-          <div class="hero-actions">
-            <div class="palette-switcher">
-              <label for="paletteSelect">Palette</label>
-              <select id="paletteSelect" name="palette">
-                <option value="palette-a">Palette A — Developer Blue</option>
-                <option value="palette-b" selected>Palette B — Editorial Warm Neutral</option>
-                <option value="palette-c">Palette C — Soft Contrast</option>
-              </select>
-            </div>
-
-            <p class="hero-note">
-              Warm editorial default with switchable alternate themes for product and developer presentation.
-            </p>
+          <div class="hero-links">
+            <a class="button-link button-link--primary" href="#builder-title">Open Builder</a>
+            <a class="button-link" href="#sponsored-payments">Sponsored Visibility</a>
           </div>
         </div>
 
         <div class="hero-card">
-          <p class="hero-card__eyebrow">Builder status</p>
-          <h2>Prompt-first workflow with reliable live generation.</h2>
+          <p class="hero-card__eyebrow">Frontend status</p>
+          <h2>Prompt-first workflow with stable live generation.</h2>
           <p class="hero-card__copy">
             Theme, authorship, work reference, composition scale, and instruction notes remain intact.
-            The interface now supports palette switching without disturbing builder logic.
+            The interface now uses a single editorial brand palette across the hero, controls, and preview.
           </p>
 
           <div class="hero-card__meta">
             <div class="hero-card__meta-item">
               <span>Mode</span>
-              <strong>Frontend MVP</strong>
+              <strong>Structured MVP</strong>
             </div>
             <div class="hero-card__meta-item">
-              <span>Prompt Engine</span>
-              <strong>Live Preview</strong>
+              <span>Preview</span>
+              <strong>Live Prompt Output</strong>
             </div>
             <div class="hero-card__meta-item">
-              <span>Visual System</span>
-              <strong>Editorial + Developer</strong>
+              <span>Brand Style</span>
+              <strong>Editorial Warm Neutral</strong>
             </div>
           </div>
 
           <p class="hero-card__footer">
-            Designed for literary prompt drafting, mockup workflows, and future portal expansion.
+            Designed for literary prompt drafting today and future admin, sponsorship, and payment expansion later.
           </p>
         </div>
       </header>
+
+      <section class="sponsored-band" id="sponsored-payments" aria-labelledby="sponsored-title">
+        <div class="sponsored-band__copy">
+          <p class="eyebrow eyebrow--muted">Sponsored</p>
+          <h2 id="sponsored-title">Sponsored visibility and SEO placement</h2>
+          <p>
+            Reserve clearly labeled sponsor space near the top of PoemFill.dev for editorial visibility,
+            brand exposure, and keyword-aligned discovery support. This section is designed for future paid
+            placement workflows and high-visibility sponsor presentation.
+          </p>
+          <div class="sponsored-band__chips">
+            <span class="sponsor-chip">Top-page visibility</span>
+            <span class="sponsor-chip">SEO-aligned placement</span>
+            <span class="sponsor-chip">Clearly labeled sponsored content</span>
+          </div>
+        </div>
+
+        <div class="sponsored-grid">
+          <article class="sponsor-card sponsor-card--featured">
+            <p class="sponsor-card__label">Featured Sponsor</p>
+            <h3>Hero-adjacent placement</h3>
+            <p>
+              Highest visual priority for premium sponsor presence near the top of the page with clear
+              sponsored labeling.
+            </p>
+            <ul class="sponsor-list">
+              <li>Top-page editorial visibility</li>
+              <li>Brand-forward placement card</li>
+              <li>Future payment workflow ready</li>
+            </ul>
+          </article>
+
+          <article class="sponsor-card">
+            <p class="sponsor-card__label">Editorial Placement</p>
+            <h3>Content-aligned sponsor block</h3>
+            <p>
+              Warm, integrated sponsor format styled to match the editorial interface while maintaining
+              clear separation from product controls.
+            </p>
+            <ul class="sponsor-list">
+              <li>Readable branded format</li>
+              <li>Structured sponsor copy area</li>
+              <li>SEO visibility support</li>
+            </ul>
+          </article>
+
+          <article class="sponsor-card">
+            <p class="sponsor-card__label">Search Visibility</p>
+            <h3>Keyword-oriented presence</h3>
+            <p>
+              Placement-ready module for sponsors seeking discoverability, audience relevance, and future
+              promotional expansion.
+            </p>
+            <ul class="sponsor-list">
+              <li>Discovery-oriented positioning</li>
+              <li>Expandable payment section</li>
+              <li>Static MVP ready for checkout wiring</li>
+            </ul>
+          </article>
+        </div>
+      </section>
 
       <main class="workspace">
         <section class="panel panel--form" aria-labelledby="builder-title">
@@ -324,7 +375,7 @@
             tone, language style, and output scale are assembled into a single prompt with a stable preview surface.
           </p>
           <p>
-            If Subject / Focus is left blank, the JavaScript layer can still derive a fallback subject from the selected
+            If Subject / Focus is left blank, the JavaScript layer still derives a fallback subject from the selected
             literary controls so the preview remains usable.
           </p>
         </article>
@@ -346,7 +397,8 @@
 }</code></pre>
 
           <p class="code-note">
-            This is a frontend configuration example for the prompt builder layout, not a public API contract.
+            This is a frontend configuration example for the prompt builder layout, sponsored placement visibility,
+            and future payment-ready UI expansion.
           </p>
         </article>
       </section>
