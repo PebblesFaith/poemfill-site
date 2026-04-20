@@ -157,8 +157,6 @@ const lengthPresets = {
 const DEFAULT_LENGTH_PRESET = 'medium';
 const DEFAULT_THEME_ID = themeData[0]?.id || '';
 const DEFAULT_AUTHORSHIP_ID = authorshipData[0]?.id || '';
-const PALETTE_STORAGE_KEY = 'poemfill-selected-palette';
-const SUPPORTED_PALETTES = new Set(['palette-a', 'palette-b', 'palette-c']);
 
 const DEFAULT_TOGGLE_STATE = {
   philosophy: true,
@@ -196,8 +194,7 @@ const elements = {
   wordCountBadge: document.getElementById('wordCountBadge'),
   copyButton: document.getElementById('copyButton'),
   downloadButton: document.getElementById('downloadButton'),
-  generateButton: document.getElementById('generateButton'),
-  paletteSelect: document.getElementById('paletteSelect')
+  generateButton: document.getElementById('generateButton')
 };
 
 function setSelectOptions(selectElement, items) {
@@ -541,35 +538,6 @@ function handleAuthorshipChange() {
   updatePromptPreview();
 }
 
-function getStoredPalette() {
-  const storedValue = window.localStorage.getItem(PALETTE_STORAGE_KEY);
-  return SUPPORTED_PALETTES.has(storedValue) ? storedValue : 'palette-b';
-}
-
-function applyPalette(paletteId) {
-  const normalizedPalette = SUPPORTED_PALETTES.has(paletteId) ? paletteId : 'palette-b';
-
-  document.documentElement.setAttribute('data-theme', normalizedPalette);
-
-  if (elements.paletteSelect) {
-    elements.paletteSelect.value = normalizedPalette;
-  }
-
-  window.localStorage.setItem(PALETTE_STORAGE_KEY, normalizedPalette);
-}
-
-function initializePaletteSwitcher() {
-  applyPalette(getStoredPalette());
-
-  if (!elements.paletteSelect) {
-    return;
-  }
-
-  elements.paletteSelect.addEventListener('change', (event) => {
-    applyPalette(event.target.value);
-  });
-}
-
 function restoreDefaultFormState() {
   populateThemes();
   populateAuthorships();
@@ -655,7 +623,6 @@ function initializeForm() {
 }
 
 function initializeApp() {
-  initializePaletteSwitcher();
   initializeForm();
   bindEvents();
 }
