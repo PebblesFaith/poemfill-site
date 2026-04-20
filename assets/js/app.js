@@ -1,4 +1,5 @@
-// app.js
+// File: assets/js/app.js
+
 const themeData = [
   {
     id: 'redemption',
@@ -153,6 +154,16 @@ const lengthPresets = {
   }
 };
 
+const DEFAULT_LENGTH_PRESET = 'medium';
+const DEFAULT_THEME_ID = themeData[0]?.id || '';
+const DEFAULT_AUTHORSHIP_ID = authorshipData[0]?.id || '';
+const DEFAULT_TOGGLE_STATE = {
+  philosophy: true,
+  scripture: false,
+  imagery: true,
+  rhetoric: false
+};
+
 const elements = {
   form: document.getElementById('prompt-form'),
   alert: document.getElementById('form-alert'),
@@ -185,39 +196,54 @@ const elements = {
   generateButton: document.getElementById('generateButton')
 };
 
-function populateThemes() {
-  const options = themeData
-    .map((theme) => `<option value="${theme.id}">${theme.name}</option>`)
-    .join('');
+function setSelectOptions(selectElement, items) {
+  if (!selectElement) return;
 
-  elements.themeSelect.innerHTML = options;
+  selectElement.innerHTML = items
+    .map((item) => `<option value="${item.id}">${item.name}</option>`)
+    .join('');
+}
+
+function populateThemes() {
+  setSelectOptions(elements.themeSelect, themeData);
 }
 
 function populateAuthorships() {
-  const options = authorshipData
-    .map((author) => `<option value="${author.id}">${author.name}</option>`)
-    .join('');
-
-  elements.authorshipSelect.innerHTML = options;
+  setSelectOptions(elements.authorshipSelect, authorshipData);
 }
 
-function populateWorks(authorshipId) {
-  const matchingWorks = workData.filter((work) => work.authorshipId === authorshipId);
-  elements.workSelect.innerHTML = matchingWorks
-    .map((work) => `<option value="${work.id}">${work.name}</option>`)
-    .join('');
+function getWorksByAuthorshipId(authorshipId) {
+  return workData.filter((work) => work.authorshipId === authorshipId);
+}
+
+function populateWorks(authorshipId, selectedWorkId = '') {
+  const matchingWorks = getWorksByAuthorshipId(authorshipId);
+  setSelectOptions(elements.workSelect, matchingWorks);
+
+  if (!matchingWorks.length) {
+    return;
+  }
+
+  const hasRequestedWork = matchingWorks.some((work) => work.id === selectedWorkId);
+  elements.workSelect.value = hasRequestedWork ? selectedWorkId : matchingWorks[0].id;
 }
 
 function getThemeById(themeId) {
-  return themeData.find((theme) => theme.id === themeId) || themeData[0];
+  return themeData.find((theme) => theme.id === themeId) || themeData[0] || null;
 }
 
 function getAuthorshipById(authorshipId) {
-  return authorshipData.find((author) => author.id === authorshipId) || authorshipData[0];
+  return authorshipData.find((author) => author.id === authorshipId) || authorshipData[0] || null;
 }
 
-function getWorkById(workId) {
-  return workData.find((work) => work.id === workId) || workData[0];
+function getWorkById(workId, authorshipId = '') {
+  const directMatch = workData.find((work) => work.id === workId);
+  if (directMatch) {
+    return directMatch;
+  }
+
+  const matchingWorks = getWorksByAuthorshipId(authorshipId);
+  return matchingWorks[0] || workData[0] || null;
 }
 
 function syncLengthPreset() {
@@ -229,65 +255,111 @@ function syncLengthPreset() {
   elements.paragraphDensitySelect.value = preset.paragraphDensity;
 }
 
-function updateContextHelp() {
-  const theme = getThemeById(elements.themeSelect.value);
-  const author = getAuthorshipById(elements.authorshipSelect.value);
-  const work = getWorkById(elements.workSelect.value);
+function buildFallbackSubject(values) {
+  const themeName = values.theme?.name || 'the selected theme';
+  const workName = values.work?.name || 'the selected work';
+  const authorshipName = values.authorship?.name || 'the selected authorship';
 
-  elements.themeHelp.textContent = `${theme.shortDescription} ${theme.promptNotes}`;
-  elements.authorshipHelp.textContent = `${author.styleLabel} — ${author.description}`;
-  elements.workHelp.textContent = `${work.description} ${work.promptNotes}`;
+  return `${themeName}, shaped by ${workName} in the style of ${authorshipName}`;
+}
 
-  elements.summaryTheme.textContent = theme.name;
-  elements.summaryAuthorship.textContent = author.name;
-  elements.summaryWork.textContent = work.name;
+function normalizeStanzaCount(rawValue, lengthPreset) {
+  const preset = lengthPresets[lengthPreset] || lengthPresets[DEFAULT_LENGTH_PRESET];
+  const numericValue = Number(rawValue);
+
+  if (Number.isFinite(numericValue) && numericValue >= 1) {
+    return Math.floor(numericValue);
+  }
+
+  return preset.stanzaCount;
+}
+
+function normalizeLineRange(rawValue, lengthPreset) {
+  const preset = lengthPresets[lengthPreset] || lengthPresets[DEFAULT_LENGTH_PRESET];
+  const trimmed = String(rawValue || '').trim();
+
+  return trimmed || preset.lineRange;
+}
+
+function normalizeParagraphDensity(rawValue, lengthPreset) {
+  const preset = lengthPresets[lengthPreset] || lengthPresets[DEFAULT_LENGTH_PRESET];
+  const allowedValues = new Set(['minimal', 'balanced', 'expanded', 'long-paragraphs']);
+
+  return allowedValues.has(rawValue) ? rawValue : preset.paragraphDensity;
 }
 
 function collectFormValues() {
-  return {
-    theme: getThemeById(elements.themeSelect.value),
-    authorship: getAuthorshipById(elements.authorshipSelect.value),
-    work: getWorkById(elements.workSelect.value),
+  const selectedTheme = getThemeById(elements.themeSelect.value);
+  const selectedAuthorship = getAuthorshipById(elements.authorshipSelect.value);
+  const selectedWork = getWorkById(elements.workSelect.value, selectedAuthorship?.id);
+
+  const rawSubject = elements.subjectInput.value.trim();
+  const lengthPreset = elements.lengthPresetSelect.value || DEFAULT_LENGTH_PRESET;
+
+  const values = {
+    theme: selectedTheme,
+    authorship: selectedAuthorship,
+    work: selectedWork,
     contentType: elements.contentTypeSelect.value,
     tone: elements.toneSelect.value,
     languageStyle: elements.languageStyleSelect.value,
-    subject: elements.subjectInput.value.trim(),
-    lengthPreset: elements.lengthPresetSelect.value,
-    stanzaCount: Number(elements.stanzaCountInput.value || 0),
-    lineRange: elements.lineRangeInput.value.trim(),
-    paragraphDensity: elements.paragraphDensitySelect.value,
+    rawSubject,
+    lengthPreset,
+    stanzaCount: normalizeStanzaCount(elements.stanzaCountInput.value, lengthPreset),
+    lineRange: normalizeLineRange(elements.lineRangeInput.value, lengthPreset),
+    paragraphDensity: normalizeParagraphDensity(elements.paragraphDensitySelect.value, lengthPreset),
     philosophy: elements.philosophyToggle.checked,
     scripture: elements.scriptureToggle.checked,
     imagery: elements.imageryToggle.checked,
     rhetoric: elements.rhetoricToggle.checked,
     notes: elements.notesInput.value.trim()
   };
+
+  values.subject = rawSubject || buildFallbackSubject(values);
+
+  return values;
 }
 
 function validateForm(values) {
   const errors = [];
 
-  if (!values.subject) {
-    errors.push('Subject / Focus is required.');
+  if (!values.theme) {
+    errors.push('A theme selection is required.');
   }
 
-  if (!values.stanzaCount || values.stanzaCount < 1) {
-    errors.push('Stanza / Section Count must be at least 1.');
+  if (!values.authorship) {
+    errors.push('An authorship selection is required.');
   }
 
-  if (!values.lineRange) {
-    errors.push('Approx. Lines Per Section is required.');
+  if (!values.work) {
+    errors.push('A work selection is required.');
+  }
+
+  if (!values.contentType) {
+    errors.push('A content type selection is required.');
+  }
+
+  if (!values.tone) {
+    errors.push('A tone selection is required.');
+  }
+
+  if (!values.languageStyle) {
+    errors.push('A language style selection is required.');
   }
 
   return errors;
 }
 
 function showAlert(message, variant) {
+  if (!elements.alert) return;
+
   elements.alert.textContent = message;
   elements.alert.className = `alert alert--${variant}`;
 }
 
 function hideAlert() {
+  if (!elements.alert) return;
+
   elements.alert.textContent = '';
   elements.alert.className = 'alert is-hidden';
 }
@@ -301,7 +373,7 @@ function humanizeContentType(contentType) {
     'hybrid-meditation': 'hybrid meditation'
   };
 
-  return labels[contentType] || contentType;
+  return labels[contentType] || contentType || 'poem';
 }
 
 function humanizeParagraphDensity(density) {
@@ -312,7 +384,7 @@ function humanizeParagraphDensity(density) {
     'long-paragraphs': 'long-paragraph development where appropriate'
   };
 
-  return labels[density] || density;
+  return labels[density] || density || 'balanced stanza and paragraph treatment';
 }
 
 function buildOptionalInstructionLines(values) {
@@ -337,20 +409,33 @@ function buildOptionalInstructionLines(values) {
   return lines;
 }
 
+function updateContextHelp() {
+  const values = collectFormValues();
+
+  elements.themeHelp.textContent = `${values.theme.shortDescription} ${values.theme.promptNotes}`;
+  elements.authorshipHelp.textContent = `${values.authorship.styleLabel} — ${values.authorship.description}`;
+  elements.workHelp.textContent = `${values.work.description} ${values.work.promptNotes}`;
+
+  elements.summaryTheme.textContent = values.theme.name;
+  elements.summaryAuthorship.textContent = values.authorship.name;
+  elements.summaryWork.textContent = values.work.name;
+}
+
 function buildPrompt(values) {
-  const preset = lengthPresets[values.lengthPreset] || lengthPresets.medium;
+  const preset = lengthPresets[values.lengthPreset] || lengthPresets[DEFAULT_LENGTH_PRESET];
   const optionalLines = buildOptionalInstructionLines(values);
 
   const sections = [
-    `Write a ${humanizeContentType(values.contentType)} on the subject of ${values.subject}.`,
-    `Base the stylistic approach on ${values.authorship.name}, drawing specifically from the tonal and structural guidance associated with ${values.work.name}.`,
+    `Write a ${humanizeContentType(values.contentType)} centered on ${values.subject}.`,
+    `Primary theme: ${values.theme.name}. ${values.theme.shortDescription}`,
+    `Base the stylistic approach on ${values.authorship.name}, drawing specifically from the tonal, structural, and conceptual guidance associated with ${values.work.name}.`,
     `Use ${values.languageStyle} with a ${values.tone} tonal register.`,
-    `The selected theme is ${values.theme.name}: ${values.theme.shortDescription}`,
     `Develop the composition in approximately ${values.stanzaCount} sections or stanzas, with about ${values.lineRange} lines per section, using ${humanizeParagraphDensity(values.paragraphDensity)}.`,
     preset.guidance,
     `Authorship notes: ${values.authorship.description}`,
     `Work notes: ${values.work.description}`,
-    `Theme notes: ${values.theme.promptNotes}`
+    `Work emphasis: ${values.work.promptNotes}`,
+    `Theme emphasis: ${values.theme.promptNotes}`
   ];
 
   if (optionalLines.length) {
@@ -379,11 +464,18 @@ function buildPrompt(values) {
   return sections.join('\n\n');
 }
 
+function getWordCount(text) {
+  const normalized = String(text || '').trim();
+  if (!normalized) return 0;
+
+  return normalized.split(/\s+/).length;
+}
+
 function updatePromptPreview() {
+  updateContextHelp();
+
   const values = collectFormValues();
   const errors = validateForm(values);
-
-  updateContextHelp();
 
   if (errors.length) {
     showAlert(errors[0], 'danger');
@@ -396,19 +488,19 @@ function updatePromptPreview() {
 
   const prompt = buildPrompt(values);
   elements.promptOutput.value = prompt;
-
-  const wordCount = prompt.trim() ? prompt.trim().split(/\s+/).length : 0;
-  elements.wordCountBadge.textContent = `${wordCount} words`;
+  elements.wordCountBadge.textContent = `${getWordCount(prompt)} words`;
 }
 
 async function copyPromptToClipboard() {
-  if (!elements.promptOutput.value.trim()) {
+  const text = elements.promptOutput.value.trim();
+
+  if (!text) {
     showAlert('There is no prompt to copy yet.', 'danger');
     return;
   }
 
   try {
-    await navigator.clipboard.writeText(elements.promptOutput.value);
+    await navigator.clipboard.writeText(text);
     showAlert('Prompt copied to clipboard.', 'success');
   } catch (error) {
     showAlert('Clipboard copy failed in this browser session.', 'danger');
@@ -417,6 +509,7 @@ async function copyPromptToClipboard() {
 
 function downloadPromptText() {
   const text = elements.promptOutput.value.trim();
+
   if (!text) {
     showAlert('There is no prompt to download yet.', 'danger');
     return;
@@ -439,11 +532,36 @@ function downloadPromptText() {
 }
 
 function handleAuthorshipChange() {
-  populateWorks(elements.authorshipSelect.value);
+  const selectedAuthorshipId = elements.authorshipSelect.value;
+  populateWorks(selectedAuthorshipId);
+  updatePromptPreview();
+}
+
+function restoreDefaultFormState() {
+  populateThemes();
+  populateAuthorships();
+
+  elements.themeSelect.value = DEFAULT_THEME_ID;
+  elements.authorshipSelect.value = DEFAULT_AUTHORSHIP_ID;
+  populateWorks(DEFAULT_AUTHORSHIP_ID);
+
+  elements.lengthPresetSelect.value = DEFAULT_LENGTH_PRESET;
+  elements.philosophyToggle.checked = DEFAULT_TOGGLE_STATE.philosophy;
+  elements.scriptureToggle.checked = DEFAULT_TOGGLE_STATE.scripture;
+  elements.imageryToggle.checked = DEFAULT_TOGGLE_STATE.imagery;
+  elements.rhetoricToggle.checked = DEFAULT_TOGGLE_STATE.rhetoric;
+
+  syncLengthPreset();
+  hideAlert();
   updatePromptPreview();
 }
 
 function bindEvents() {
+  elements.form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    updatePromptPreview();
+  });
+
   elements.authorshipSelect.addEventListener('change', handleAuthorshipChange);
   elements.themeSelect.addEventListener('change', updatePromptPreview);
   elements.workSelect.addEventListener('change', updatePromptPreview);
@@ -465,24 +583,24 @@ function bindEvents() {
     updatePromptPreview();
   });
 
-  elements.copyButton.addEventListener('click', copyPromptToClipboard);
-  elements.downloadButton.addEventListener('click', downloadPromptText);
-  elements.generateButton.addEventListener('click', updatePromptPreview);
+  elements.copyButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    copyPromptToClipboard();
+  });
+
+  elements.downloadButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    downloadPromptText();
+  });
+
+  elements.generateButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    updatePromptPreview();
+  });
 
   elements.form.addEventListener('reset', () => {
     window.setTimeout(() => {
-      elements.lengthPresetSelect.value = 'medium';
-      elements.philosophyToggle.checked = true;
-      elements.scriptureToggle.checked = false;
-      elements.imageryToggle.checked = true;
-      elements.rhetoricToggle.checked = false;
-      populateThemes();
-      populateAuthorships();
-      elements.authorshipSelect.value = authorshipData[0].id;
-      populateWorks(authorshipData[0].id);
-      syncLengthPreset();
-      hideAlert();
-      updatePromptPreview();
+      restoreDefaultFormState();
     }, 0);
   });
 }
@@ -490,9 +608,15 @@ function bindEvents() {
 function initializeForm() {
   populateThemes();
   populateAuthorships();
-  elements.themeSelect.value = themeData[0].id;
-  elements.authorshipSelect.value = authorshipData[0].id;
-  populateWorks(authorshipData[0].id);
+
+  elements.themeSelect.value = DEFAULT_THEME_ID;
+  elements.authorshipSelect.value = DEFAULT_AUTHORSHIP_ID;
+  populateWorks(DEFAULT_AUTHORSHIP_ID);
+
+  if (!elements.lengthPresetSelect.value) {
+    elements.lengthPresetSelect.value = DEFAULT_LENGTH_PRESET;
+  }
+
   syncLengthPreset();
   updatePromptPreview();
 }
