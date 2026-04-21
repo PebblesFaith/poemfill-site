@@ -191,7 +191,7 @@ body.nav-is-stuck .nav-spacer {
 
 .hero-title {
   margin: 0;
-  max-width: 10.8ch;
+  max-width: 100%;
   font-family: var(--font-display);
   font-size: clamp(2.35rem, 4vw, 3.7rem);
   line-height: 0.98;
