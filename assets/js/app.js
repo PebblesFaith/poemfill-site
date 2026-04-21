@@ -556,7 +556,25 @@ function restoreDefaultFormState() {
   updatePromptPreview();
 }
 
+function setupStickyNavState() {
+  const nav = document.querySelector('.site-nav');
+  if (!nav) return;
+
+  function updateNavState() {
+    if (window.scrollY > 24) {
+      document.body.classList.add('nav-is-stuck');
+    } else {
+      document.body.classList.remove('nav-is-stuck');
+    }
+  }
+
+  updateNavState();
+  window.addEventListener('scroll', updateNavState, { passive: true });
+}
+
 function bindEvents() {
+  if (!elements.form) return;
+
   elements.form.addEventListener('submit', (event) => {
     event.preventDefault();
     updatePromptPreview();
@@ -606,6 +624,8 @@ function bindEvents() {
 }
 
 function initializeForm() {
+  if (!elements.form) return;
+
   populateThemes();
   populateAuthorships();
 
@@ -622,6 +642,7 @@ function initializeForm() {
 }
 
 function initializeApp() {
+  setupStickyNavState();
   initializeForm();
   bindEvents();
 }
