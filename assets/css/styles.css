@@ -98,9 +98,9 @@ a {
 }
 
 .site-nav__inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   padding: 12px 16px;
   background: var(--surface);
@@ -114,6 +114,7 @@ a {
   font-weight: 800;
   letter-spacing: 0.02em;
   white-space: nowrap;
+  justify-self: start;
 }
 
 .site-nav__menu {
@@ -122,6 +123,7 @@ a {
   justify-content: center;
   gap: 18px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .site-nav__menu a {
@@ -154,6 +156,7 @@ a {
     box-shadow var(--transition-fast),
     background var(--transition-fast),
     border-color var(--transition-fast);
+  justify-self: end;
 }
 
 .site-nav__cta:hover,
@@ -514,6 +517,7 @@ a.button-link.button-link--primary:focus-visible {
 
 .ad-rail {
   display: flex;
+  justify-content: center;
   min-width: 0;
 }
 
@@ -521,8 +525,11 @@ a.button-link.button-link--primary:focus-visible {
   display: grid;
   place-items: center;
   gap: 8px;
-  width: 100%;
-  min-height: 100%;
+  width: 300px;
+  max-width: 100%;
+  min-width: 300px;
+  min-height: 600px;
+  height: 600px;
   padding: 18px;
   border: 2px dashed var(--ad-slot-border);
   border-radius: var(--radius-lg);
@@ -1019,13 +1026,27 @@ a.button-link.button-link--primary:focus-visible {
   }
 
   .site-nav__inner {
-    display: grid;
+    grid-template-columns: 1fr;
     justify-items: stretch;
     gap: 12px;
+    padding: 16px 18px;
+    border-radius: var(--radius-xl);
+  }
+
+  .site-nav__brand {
+    justify-self: center;
+    text-align: center;
   }
 
   .site-nav__menu {
-    justify-content: flex-start;
+    justify-content: center;
+    gap: 12px 14px;
+  }
+
+  .site-nav__cta,
+  .site-nav__cta:visited {
+    justify-self: center;
+    min-width: 200px;
   }
 
   .panel--preview {
@@ -1039,7 +1060,10 @@ a.button-link.button-link--primary:focus-visible {
   }
 
   .ad-rail__slot {
-    min-height: 260px;
+    width: min(100%, 300px);
+    min-width: 0;
+    min-height: 600px;
+    height: 600px;
   }
 }
 
@@ -1047,6 +1071,16 @@ a.button-link.button-link--primary:focus-visible {
   .site-shell {
     width: min(100% - 20px, 1380px);
     padding-top: 12px;
+  }
+
+  .site-nav {
+    position: static;
+    top: auto;
+  }
+
+  .nav-spacer,
+  body.nav-is-stuck .nav-spacer {
+    height: 0;
   }
 
   .hero-status,
@@ -1074,16 +1108,45 @@ a.button-link.button-link--primary:focus-visible {
   .panel__header,
   .code-card__header,
   .hero-links,
-  .button-row,
-  .site-nav__menu {
+  .button-row {
     flex-direction: column;
     align-items: stretch;
   }
 
   .button,
-  a.button-link,
-  .site-nav__cta {
+  a.button-link {
     width: 100%;
+  }
+
+  .site-nav__inner {
+    padding: 16px;
+    border-radius: 24px;
+  }
+
+  .site-nav__menu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  .site-nav__menu a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--surface-alt);
+    text-align: center;
+  }
+
+  .site-nav__cta,
+  .site-nav__cta:visited {
+    width: min(100%, 220px);
+    min-width: 0;
+    justify-self: center;
   }
 
   .hero-title {
@@ -1109,10 +1172,19 @@ a.button-link.button-link--primary:focus-visible {
   }
 
   .ad-rail__slot {
+    width: 100%;
+    max-width: none;
     min-height: 220px;
+    height: auto;
   }
 
   .prompt-output {
     min-height: 420px;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-nav__menu {
+    grid-template-columns: 1fr;
   }
 }
