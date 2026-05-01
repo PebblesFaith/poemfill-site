@@ -16,9 +16,9 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/css/styles.css?v=20260420-003" />
-    <script src="assets/js/app.js?v=20260420-003"></script>
-    
+    <script defer src="assets/js/app.js?v=20260501-001"></script>
   </head>
+
   <body id="top">
     <div class="site-shell">
       <header class="site-nav" aria-label="Primary navigation">
@@ -42,8 +42,6 @@
 
       <header class="hero">
         <div class="hero-intro">
-          <!--<p class="eyebrow">PoemFill.dev</p>-->
-
           <h1 class="hero-title">
             Structured literary prompt building with a warm editorial surface.
           </h1>
@@ -183,7 +181,9 @@
               <div class="field-grid">
                 <div class="field">
                   <label for="themeSelect">Theme</label>
-                  <select id="themeSelect" name="theme"></select>
+                  <select id="themeSelect" name="theme" aria-describedby="themeHelp">
+                    <option value="">Loading themes…</option>
+                  </select>
                   <p class="field-help" id="themeHelp"></p>
                 </div>
 
@@ -231,13 +231,17 @@
               <div class="field-grid">
                 <div class="field">
                   <label for="authorshipSelect">Authorship</label>
-                  <select id="authorshipSelect" name="authorship"></select>
+                  <select id="authorshipSelect" name="authorship" aria-describedby="authorshipHelp">
+                    <option value="">Loading authorships…</option>
+                  </select>
                   <p class="field-help" id="authorshipHelp"></p>
                 </div>
 
                 <div class="field">
                   <label for="workSelect">Work Reference</label>
-                  <select id="workSelect" name="work"></select>
+                  <select id="workSelect" name="work" aria-describedby="workHelp">
+                    <option value="">Select an authorship first</option>
+                  </select>
                   <p class="field-help" id="workHelp"></p>
                 </div>
 
@@ -441,7 +445,5 @@
         </div>
       </footer>
     </div>
-
-    <script src="assets/js/app.js?v=20260420-002"></script>
   </body>
 </html>
