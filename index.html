@@ -15,7 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260501-002" />
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260501-004" />
     <script defer src="assets/js/app.js?v=20260501-001"></script>
   </head>
 
@@ -156,53 +156,68 @@
         </div>
       </section>
 
-      <section class="ad-placeholder-band" id="ad-slots" aria-labelledby="ad-slots-title">
-        <div class="ad-placeholder-band__header">
+      <section class="ad-slots-panel" id="ad-slots" aria-labelledby="ad-slots-title">
+        <div class="ad-slots-panel__header">
           <div>
             <p class="eyebrow eyebrow--muted">Sponsor slots</p>
             <h2 id="ad-slots-title">Reserved advertising placements</h2>
             <p>
-              Clearly labeled sponsor placeholders are included for future paid advertising, brand placement,
-              and editorially aligned sponsor campaigns.
+              These light-grey sponsor containers reserve clear visual space for future paid ads,
+              partner messages, affiliate placements, or editorial sponsorship campaigns.
             </p>
           </div>
           <span class="status-pill status-pill--accent">Ad-ready MVP</span>
         </div>
 
-        <div class="ad-placeholder-grid">
-          <article class="ad-placeholder-card ad-placeholder-card--premium" aria-label="Advertisement placeholder one">
-            <p class="ad-placeholder-card__label">Advertisement Placeholder</p>
-            <h3>Premium sponsor slot</h3>
-            <div class="ad-placeholder-card__box">
+        <div class="ad-slots-grid" aria-label="Reserved advertising slots">
+          <article class="ad-slot-card">
+            <div class="ad-slot-card__header">
+              <p class="ad-slot-card__label">Advertisement Placeholder</p>
+              <h3>Premium sponsor slot</h3>
+            </div>
+
+            <div class="ad-slot-box ad-slot-box--large">
               <span>Reserved Sponsor Artwork</span>
+              <small>Recommended visual area: 728 × 220</small>
             </div>
+
             <p>
-              Top-page sponsor space for a featured brand, publisher, literary tool, writing platform,
-              or creative technology partner.
+              Top-page sponsor container for a featured brand, publisher, literary tool,
+              writing platform, or creative technology partner.
             </p>
           </article>
 
-          <article class="ad-placeholder-card" aria-label="Advertisement placeholder two">
-            <p class="ad-placeholder-card__label">Advertisement Placeholder</p>
-            <h3>Builder-adjacent sponsor slot</h3>
-            <div class="ad-placeholder-card__box">
+          <article class="ad-slot-card">
+            <div class="ad-slot-card__header">
+              <p class="ad-slot-card__label">Advertisement Placeholder</p>
+              <h3>Builder-adjacent sponsor slot</h3>
+            </div>
+
+            <div class="ad-slot-box">
               <span>Reserved Sponsor Message</span>
+              <small>Recommended visual area: 336 × 280</small>
             </div>
+
             <p>
-              Contextual placement for sponsors aligned with writing workflows, AI tools, education,
-              publishing, books, and creator resources.
+              Contextual sponsor container for writing workflows, AI tools, education,
+              publishing, books, creator services, and editorial resources.
             </p>
           </article>
 
-          <article class="ad-placeholder-card" aria-label="Advertisement placeholder three">
-            <p class="ad-placeholder-card__label">Advertisement Placeholder</p>
-            <h3>Footer sponsor slot</h3>
-            <div class="ad-placeholder-card__box">
-              <span>Reserved Sponsor Link</span>
+          <article class="ad-slot-card">
+            <div class="ad-slot-card__header">
+              <p class="ad-slot-card__label">Advertisement Placeholder</p>
+              <h3>Footer sponsor slot</h3>
             </div>
+
+            <div class="ad-slot-box">
+              <span>Reserved Sponsor Link</span>
+              <small>Recommended visual area: 336 × 280</small>
+            </div>
+
             <p>
-              Lower-page placement for secondary campaigns, affiliate visibility, newsletter promotions,
-              and future sponsor rotation.
+              Lower-page sponsor container for secondary campaigns, affiliate visibility,
+              newsletter promotions, and future sponsor rotation.
             </p>
           </article>
         </div>
