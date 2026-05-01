@@ -34,6 +34,11 @@
   --shadow-soft: 0 16px 40px rgba(20, 24, 33, 0.06);
   --shadow-hover: 0 12px 30px rgba(20, 24, 33, 0.09);
   --transition-fast: 140ms ease;
+
+  --control-height: 50px;
+  --textarea-min-height: 144px;
+  --control-padding-x: 14px;
+  --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236f786f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 * {
@@ -539,12 +544,14 @@ a.button-link.button-link--primary:focus-visible {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+  align-items: start;
 }
 
 .field {
   display: grid;
   gap: 8px;
   min-width: 0;
+  align-content: start;
 }
 
 .field--span-2 {
@@ -567,19 +574,36 @@ a.button-link.button-link--primary:focus-visible {
   border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--text);
-  padding: 12px 14px;
+  padding: 12px var(--control-padding-x);
   transition:
     border-color var(--transition-fast),
     box-shadow var(--transition-fast),
     transform var(--transition-fast);
 }
 
-.field input,
+.field input[type="text"],
+.field input[type="number"],
 .field select {
-  min-height: 48px;
+  min-height: var(--control-height);
+  height: var(--control-height);
 }
 
-.field textarea,
+.field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 42px;
+  background-image: var(--select-arrow);
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px 8px;
+}
+
+.field textarea {
+  min-height: var(--textarea-min-height);
+  resize: vertical;
+}
+
 .prompt-output {
   resize: vertical;
 }
