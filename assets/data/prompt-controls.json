@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "schemaVersion": 1,
+    "status": "planning-draft",
+    "source": "PoemFill.dev future admin portal exploration"
+  },
+  "themes": [
+    {
+      "id": "redemption",
+      "name": "Redemption After Ruin",
+      "shortDescription": "Recovery, repair, moral return, and spiritual endurance after collapse.",
+      "promptNotes": "Keep the emotional arc serious, layered, and hard-won rather than sentimental.",
+      "suggestedToneIds": ["reflective", "solemn", "searching"],
+      "suggestedContentTypeIds": ["poem", "lyric-essay", "hybrid-meditation"],
+      "suggestedEnrichmentIds": ["philosophy", "imagery"]
+    }
+  ],
+  "contentTypes": [
+    {
+      "id": "poem",
+      "name": "Poem",
+      "structureMode": "stanza",
+      "instructionTemplate": "Use stanza count and lines per stanza guidance."
+    },
+    {
+      "id": "lyric-essay",
+      "name": "Lyric Essay",
+      "structureMode": "paragraph",
+      "instructionTemplate": "Use paragraph count and paragraph density guidance."
+    },
+    {
+      "id": "dramatic-monologue",
+      "name": "Dramatic Monologue",
+      "structureMode": "scene-section",
+      "instructionTemplate": "Use scene or section count guidance."
+    },
+    {
+      "id": "verse-sequence",
+      "name": "Verse Sequence",
+      "structureMode": "sequence-part",
+      "instructionTemplate": "Use sequence-part count guidance."
+    },
+    {
+      "id": "hybrid-meditation",
+      "name": "Hybrid Meditation",
+      "structureMode": "section-paragraph",
+      "instructionTemplate": "Blend section count and paragraph density guidance."
+    }
+  ],
+  "tones": [
+    { "id": "reflective", "name": "Reflective" },
+    { "id": "solemn", "name": "Solemn" },
+    { "id": "searching", "name": "Searching" }
+  ],
+  "languageStyles": [
+    { "id": "elevated-modern", "name": "Elevated Modern English" },
+    { "id": "classical-leaning", "name": "Classical-Leaning English" }
+  ],
+  "authorships": [
+    {
+      "id": "shakespeare",
+      "name": "William Shakespeare",
+      "description": "Controlled rhetoric, balanced clauses, dramatic turn, metaphor-rich movement.",
+      "workReferenceIds": ["hamlet", "sonnets"]
+    }
+  ],
+  "workReferences": [
+    {
+      "id": "hamlet",
+      "authorshipId": "shakespeare",
+      "name": "Hamlet",
+      "description": "Reflective conflict, moral delay, inward argument, death-conscious introspection.",
+      "promptNotes": "Favor interior debate and sharpen the tension between thought and action."
+    }
+  ],
+  "lengthPresets": [
+    {
+      "id": "medium",
+      "name": "Medium",
+      "stanzaCount": 8,
+      "sectionCount": 8,
+      "paragraphCount": 5,
+      "lineRange": "6-10",
+      "paragraphDensityId": "balanced",
+      "guidance": "Provide a complete thematic arc with enough depth for development."
+    }
+  ],
+  "paragraphDensities": [
+    { "id": "minimal", "name": "Minimal" },
+    { "id": "balanced", "name": "Balanced" },
+    { "id": "expanded", "name": "Expanded" }
+  ],
+  "enrichmentCategories": [
+    {
+      "id": "philosophy",
+      "name": "Philosophy highlights",
+      "description": "Blend reflective philosophical ideas into longer passages."
+    },
+    {
+      "id": "imagery",
+      "name": "Dense imagery",
+      "description": "Increase visual language, symbolism, and sensory texture."
+    }
+  ],
+  "sponsorSlots": [
+    {
+      "id": "top-banner",
+      "name": "Top banner",
+      "placementType": "top-banner",
+      "label": "Advertisement",
+      "status": "reserved",
+      "pricingTier": "premium",
+      "supports": [
+        "sponsorName",
+        "logoImage",
+        "destinationUrl",
+        "startDate",
+        "endDate",
+        "clickTracking",
+        "impressionTracking",
+        "internalNotes"
+      ]
+    }
+  ],
+  "longSectionalQuotes": [
+    {
+      "id": "hamlet-soliloquy-fragment",
+      "title": "Hamlet excerpt register",
+      "sourceAuthorId": "shakespeare",
+      "sourceWorkId": "hamlet",
+      "sectionLabel": "Act-linked reflection",
+      "excerptText": "Placeholder for a future legally public or public-domain sectional excerpt managed through the owner portal.",
+      "rightsStatus": "public-domain-planning",
+      "relatedThemeIds": ["redemption"],
+      "relatedPromptNoteIds": [],
+      "visibility": "draft"
+    }
+  ],
+  "adminAccessPlanning": {
+    "requiresAuthentication": true,
+    "signupMode": "owner-approved",
+    "supportsAuditLog": true
+  }
+}
