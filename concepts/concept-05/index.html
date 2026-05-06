@@ -15,8 +15,8 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260501-006" />
-    <script defer src="assets/js/app.js?v=20260501-001"></script>
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260506-007" />
+    <script defer src="assets/js/archive-room-app.js?v=20260506-011"></script>
   </head>
 
   <body id="top">
@@ -146,6 +146,44 @@
         </div>
       </section>
 
+      <section class="catalog-index" aria-labelledby="catalog-index-title">
+        <div class="catalog-index__intro">
+          <p class="eyebrow eyebrow--muted">Reading room index</p>
+          <h2 id="catalog-index-title">The builder now reads like a stack of public literary collections.</h2>
+          <p>
+            Instead of one uninterrupted utility form, Concept 05 begins to separate the archive into
+            guided collections: source material, composition structures, sponsor disclosures, and future
+            owner-managed records.
+          </p>
+        </div>
+
+        <div class="catalog-grid">
+          <article class="catalog-card">
+            <p class="catalog-card__label">Collection A</p>
+            <h3>Prompt drawers</h3>
+            <p>Themes, tones, authorships, and work references are treated like searchable catalog cards.</p>
+          </article>
+
+          <article class="catalog-card">
+            <p class="catalog-card__label">Collection B</p>
+            <h3>Structure tables</h3>
+            <p>Future paragraph and section logic can be surfaced like composition indexes rather than generic presets.</p>
+          </article>
+
+          <article class="catalog-card">
+            <p class="catalog-card__label">Collection C</p>
+            <h3>Quote register</h3>
+            <p>Long sectional quotes and prompt notes can live beside the builder as public reference material.</p>
+          </article>
+
+          <article class="catalog-card catalog-card--accent">
+            <p class="catalog-card__label">Collection D</p>
+            <h3>Disclosure shelf</h3>
+            <p>Sponsored placements remain clearly labeled and intentionally separated from the writing workflow.</p>
+          </article>
+        </div>
+      </section>
+
       <aside class="ad-banner ad-banner--top" aria-label="Top sponsored advertisement placeholder">
         <div class="ad-banner__slot">
           <span>Advertisement Placeholder</span>
@@ -233,10 +271,11 @@
               <p class="eyebrow eyebrow--muted">Builder</p>
               <h2 id="builder-title">Prompt Controls</h2>
               <p class="panel__subcopy">
-                Select the literary structure you want. The preview updates live as you change fields.
+                Start from the public source library first, then shape the output form, stored context,
+                and literary structure from the archive outward.
               </p>
             </div>
-            <span class="status-pill">Structured MVP</span>
+            <span class="status-pill">Source-first concept</span>
           </div>
 
           <form id="prompt-form" class="builder-form" novalidate>
@@ -244,19 +283,84 @@
 
             <section class="form-section">
               <div class="section-heading">
-                <h3>Core Direction</h3>
-                <p>Choose the primary output structure and thematic foundation.</p>
+                <h3>Source Library</h3>
+                <p>Begin with the public collection, authorship tradition, work reference, and the amount of source context you want carried into the prompt.</p>
               </div>
 
               <div class="field-grid">
                 <div class="field">
-                  <label for="themeSelect">Theme</label>
-                  <select id="themeSelect" name="theme" aria-describedby="themeHelp">
-                    <option value="">Loading themes…</option>
+                  <label for="sourceCollectionSelect">Source Collection</label>
+                  <select id="sourceCollectionSelect" name="sourceCollection" aria-describedby="sourceCollectionHelp">
+                    <option value="">Loading source collections…</option>
                   </select>
-                  <p class="field-help" id="themeHelp"></p>
+                  <p class="field-help" id="sourceCollectionHelp"></p>
                 </div>
 
+                <div class="field">
+                  <label for="authorshipSelect">Authorship / Tradition</label>
+                  <select id="authorshipSelect" name="authorship" aria-describedby="authorshipHelp">
+                    <option value="">Loading authorships…</option>
+                  </select>
+                  <p class="field-help" id="authorshipHelp"></p>
+                </div>
+
+                <div class="field">
+                  <label for="workSelect">Work Reference</label>
+                  <select id="workSelect" name="work" aria-describedby="workHelp">
+                    <option value="">Select an authorship first</option>
+                  </select>
+                  <p class="field-help" id="workHelp"></p>
+                </div>
+
+                <div class="field">
+                  <label for="storedContextTypeSelect">Source Context Length</label>
+                  <select id="storedContextTypeSelect" name="storedContextType">
+                    <option value="one-sentence">1 sentence</option>
+                    <option value="two-sentences">2 sentences</option>
+                    <option value="one-paragraph">1 paragraph</option>
+                    <option value="two-paragraphs">2 paragraphs</option>
+                    <option value="three-paragraphs">3 paragraphs</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="storedContextSelect">Stored Context Entry</label>
+                  <select id="storedContextSelect" name="storedContext" aria-describedby="storedContextHelp">
+                    <option value="">Loading stored context…</option>
+                  </select>
+                  <p class="field-help" id="storedContextHelp"></p>
+                </div>
+
+                <div class="field">
+                  <label for="contextUsageModeSelect">Context Usage Mode</label>
+                  <select id="contextUsageModeSelect" name="contextUsageMode">
+                    <option value="thematic-inspiration">Use as thematic inspiration</option>
+                    <option value="structural-influence">Use as structural influence</option>
+                    <option value="tonal-reference">Use as tonal reference</option>
+                    <option value="background-only">Use as background only</option>
+                  </select>
+                </div>
+
+                <div class="field field--span-2">
+                  <label for="subjectInput">Subject / Focus</label>
+                  <input
+                    id="subjectInput"
+                    name="subject"
+                    type="text"
+                    maxlength="180"
+                    placeholder="Example: grief after a public failure, divine patience, urban solitude, moral repair"
+                  />
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="section-heading">
+                <h3>Composition Design</h3>
+                <p>Shape the output form after the archive source and stored context are chosen.</p>
+              </div>
+
+              <div class="field-grid">
                 <div class="field">
                   <label for="contentTypeSelect">Content Type</label>
                   <select id="contentTypeSelect" name="contentType">
@@ -266,6 +370,14 @@
                     <option value="verse-sequence">Verse Sequence</option>
                     <option value="hybrid-meditation">Hybrid Meditation</option>
                   </select>
+                </div>
+
+                <div class="field">
+                  <label for="themeSelect">Theme</label>
+                  <select id="themeSelect" name="theme" aria-describedby="themeHelp">
+                    <option value="">Loading themes…</option>
+                  </select>
+                  <p class="field-help" id="themeHelp"></p>
                 </div>
 
                 <div class="field">
@@ -289,52 +401,7 @@
                     <option value="ornate">Ornate Literary English</option>
                   </select>
                 </div>
-              </div>
-            </section>
 
-            <section class="form-section">
-              <div class="section-heading">
-                <h3>Authorship and Source Guidance</h3>
-                <p>Match the output to a literary mode and optional work reference.</p>
-              </div>
-
-              <div class="field-grid">
-                <div class="field">
-                  <label for="authorshipSelect">Authorship</label>
-                  <select id="authorshipSelect" name="authorship" aria-describedby="authorshipHelp">
-                    <option value="">Loading authorships…</option>
-                  </select>
-                  <p class="field-help" id="authorshipHelp"></p>
-                </div>
-
-                <div class="field">
-                  <label for="workSelect">Work Reference</label>
-                  <select id="workSelect" name="work" aria-describedby="workHelp">
-                    <option value="">Select an authorship first</option>
-                  </select>
-                  <p class="field-help" id="workHelp"></p>
-                </div>
-
-                <div class="field field--span-2">
-                  <label for="subjectInput">Subject / Focus</label>
-                  <input
-                    id="subjectInput"
-                    name="subject"
-                    type="text"
-                    maxlength="180"
-                    placeholder="Example: grief after a public failure, divine patience, urban solitude, moral repair"
-                  />
-                </div>
-              </div>
-            </section>
-
-            <section class="form-section">
-              <div class="section-heading">
-                <h3>Length and Composition</h3>
-                <p>Set the output scale so the generated prompt asks for enough substance.</p>
-              </div>
-
-              <div class="field-grid">
                 <div class="field">
                   <label for="lengthPresetSelect">Length / Count</label>
                   <select id="lengthPresetSelect" name="lengthPreset">
@@ -346,17 +413,17 @@
                   </select>
                 </div>
 
-                <div class="field">
-                  <label for="stanzaCountInput">Stanza / Section Count</label>
+                <div class="field" id="structureCountField">
+                  <label for="stanzaCountInput" id="structureCountLabel">Stanza Count</label>
                   <input id="stanzaCountInput" name="stanzaCount" type="number" min="1" max="24" value="8" />
                 </div>
 
-                <div class="field">
-                  <label for="lineRangeInput">Approx. Lines Per Section</label>
+                <div class="field" id="lineRangeField">
+                  <label for="lineRangeInput" id="lineRangeLabel">Approx. Lines Per Section</label>
                   <input id="lineRangeInput" name="lineRange" type="text" maxlength="30" value="6–10" />
                 </div>
 
-                <div class="field">
+                <div class="field" id="paragraphDensityField">
                   <label for="paragraphDensitySelect">Paragraph Density</label>
                   <select id="paragraphDensitySelect" name="paragraphDensity">
                     <option value="minimal">Minimal</option>
@@ -438,33 +505,89 @@
           </form>
         </section>
 
-        <aside class="panel panel--preview" aria-labelledby="preview-title">
-          <div class="panel__header">
-            <div>
-              <p class="eyebrow eyebrow--muted">Preview</p>
-              <h2 id="preview-title">Live Prompt Preview</h2>
-              <p class="panel__subcopy">This output is ready to paste into your generation workflow.</p>
+        <aside class="archive-sidebar" aria-label="Preview and reference rail">
+          <section class="panel panel--preview" aria-labelledby="preview-title">
+            <div class="panel__header">
+              <div>
+                <p class="eyebrow eyebrow--muted">Preview</p>
+                <h2 id="preview-title">Live Prompt Preview</h2>
+                <p class="panel__subcopy">This output is ready to paste into your generation workflow.</p>
+              </div>
+              <span class="status-pill status-pill--accent" id="wordCountBadge">0 words</span>
             </div>
-            <span class="status-pill status-pill--accent" id="wordCountBadge">0 words</span>
-          </div>
 
-          <div class="preview-meta">
-            <div>
-              <span class="meta-label">Selected Theme</span>
-              <strong id="summaryTheme">—</strong>
-            </div>
-            <div>
-              <span class="meta-label">Selected Authorship</span>
-              <strong id="summaryAuthorship">—</strong>
-            </div>
-            <div>
-              <span class="meta-label">Selected Work</span>
-              <strong id="summaryWork">—</strong>
-            </div>
-          </div>
+            <label class="preview-label" for="promptOutput">Generated Prompt</label>
+            <textarea id="promptOutput" class="prompt-output" rows="22" readonly></textarea>
 
-          <label class="preview-label" for="promptOutput">Generated Prompt</label>
-          <textarea id="promptOutput" class="prompt-output" rows="22" readonly></textarea>
+            <div class="preview-footer-note">
+              <span>Archive note</span>
+              <p>
+                Future JSON-backed prompt records can let this rail display form-specific structure guidance,
+                public quote references, and linked sponsor disclosures.
+              </p>
+            </div>
+          </section>
+
+          <section class="reference-tray" aria-labelledby="source-summary-title">
+            <p class="eyebrow eyebrow--muted">Source summary</p>
+            <h2 id="source-summary-title">Archive selections at a glance.</h2>
+            <div class="summary-grid">
+              <div>
+                <span class="meta-label">Source Collection</span>
+                <strong id="summaryCollection">—</strong>
+              </div>
+              <div>
+                <span class="meta-label">Authorship</span>
+                <strong id="summaryAuthorship">—</strong>
+              </div>
+              <div>
+                <span class="meta-label">Work</span>
+                <strong id="summaryWork">—</strong>
+              </div>
+              <div>
+                <span class="meta-label">Theme</span>
+                <strong id="summaryTheme">—</strong>
+              </div>
+              <div>
+                <span class="meta-label">Context Length</span>
+                <strong id="summaryContextType">—</strong>
+              </div>
+              <div>
+                <span class="meta-label">Usage Mode</span>
+                <strong id="summaryUsageMode">—</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="reference-tray" aria-labelledby="context-preview-title">
+            <p class="eyebrow eyebrow--muted">Stored context preview</p>
+            <h2 id="context-preview-title">Public source block selected for this run.</h2>
+            <article class="reference-note reference-note--context">
+              <strong id="contextEntryTitle">—</strong>
+              <span class="context-card__meta" id="contextEntryCitation">—</span>
+              <p id="contextEntryText">Choose a stored public context entry to preview it here.</p>
+            </article>
+          </section>
+
+          <section class="reference-tray" aria-labelledby="structure-summary-title">
+            <p class="eyebrow eyebrow--muted">Structure summary</p>
+            <h2 id="structure-summary-title">The current output form and scale.</h2>
+            <article class="reference-note">
+              <strong id="structureSummaryTitle">—</strong>
+              <p id="structureSummaryBody">Select a content type to see the active structure model.</p>
+            </article>
+          </section>
+
+          <section class="reference-tray" aria-labelledby="reference-tray-title">
+            <p class="eyebrow eyebrow--muted">Active enrichments</p>
+            <h2 id="reference-tray-title">Supplemental layers included in the prompt.</h2>
+            <div class="reference-tray__grid">
+              <article class="reference-note">
+                <strong>Selected enrichment layers</strong>
+                <p id="enrichmentSummary">No supplemental enrichments selected beyond the core source records.</p>
+              </article>
+            </div>
+          </section>
         </aside>
       </main>
 
@@ -473,12 +596,13 @@
           <p class="eyebrow eyebrow--muted">Builder notes</p>
           <h2 id="builder-notes-title">Archive surface. Structured prompt assembly.</h2>
           <p>
-            PoemFill.dev is organized for repeatable literary prompting. Theme, authorship, work reference,
-            tone, language style, and output scale are assembled into a single prompt with a stable preview surface.
+            PoemFill.dev is now organized around source-first prompting. Public collections, authorship traditions,
+            work references, stored context blocks, and output structure are assembled into a single prompt with a
+            stable review rail.
           </p>
           <p>
             If Subject / Focus is left blank, the JavaScript layer still derives a fallback subject from the selected
-            literary controls so the preview remains usable.
+            archive source, theme, and literary controls so the preview remains usable.
           </p>
         </article>
 
@@ -489,13 +613,18 @@
           </div>
 
           <pre class="code-block"><code>{
+  "sourceCollection": "public-poems",
+  "sourceContextLength": "1 paragraph",
+  "storedContext": "shakespeare-one-paragraph",
+  "contextUsageMode": "thematic-inspiration",
   "theme": "redemption",
   "authorship": "shakespeare",
   "work": "hamlet",
-  "contentType": "poem",
+  "contentType": "lyric-essay",
   "tone": "reflective",
   "languageStyle": "elevated-modern",
-  "lengthPreset": "developer"
+  "lengthPreset": "developer",
+  "paragraphDensity": "long-paragraphs"
 }</code></pre>
 
           <p class="code-note">

@@ -1,4 +1,5 @@
-// File: assets/js/app.js
+// File: assets/js/archive-room-app.js
+// Cache-busted mirror of app.js for Concept 05 preview loading.
 
 (function () {
   'use strict';
